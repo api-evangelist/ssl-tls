@@ -1,0 +1,61 @@
+{
+  "@context": {
+    "@version": 1.1,
+    "schema": "https://schema.org/",
+    "cert": "http://www.w3.org/ns/auth/cert#",
+    "sec": "https://w3id.org/security#",
+    "tls": "https://www.w3.org/ns/tls-cert/",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+
+    "Certificate": "cert:Certificate",
+    "CertificateOrder": "tls:CertificateOrder",
+    "Challenge": "tls:DomainChallenge",
+    "Domain": "schema:WebSite",
+
+    "id": "schema:identifier",
+    "commonName": "cert:subject",
+    "subjectAlternativeNames": "cert:subjectAlternativeName",
+    "serialNumber": "cert:serialNumber",
+    "issuer": "cert:issuer",
+    "subject": "cert:subject",
+    "notBefore": {
+      "@id": "schema:validFrom",
+      "@type": "xsd:dateTime"
+    },
+    "notAfter": {
+      "@id": "schema:validThrough",
+      "@type": "xsd:dateTime"
+    },
+    "status": "schema:status",
+    "certType": "tls:certificateType",
+    "keyAlgorithm": "tls:keyAlgorithm",
+    "pem": "cert:pemEncoded",
+    "chain": "tls:certificateChain",
+    "fingerprint": "cert:fingerprint",
+    "sha256": {
+      "@id": "cert:sha256",
+      "@type": "xsd:hexBinary"
+    },
+    "createdAt": {
+      "@id": "schema:dateCreated",
+      "@type": "xsd:dateTime"
+    },
+    "revokedAt": {
+      "@id": "tls:revokedAt",
+      "@type": "xsd:dateTime"
+    },
+    "revocationReason": "tls:revocationReason",
+
+    "domains": {
+      "@id": "tls:coveredDomains",
+      "@container": "@list"
+    },
+    "challenges": {
+      "@id": "tls:hasChallenge",
+      "@container": "@list"
+    },
+    "token": "tls:challengeToken",
+    "type": "tls:challengeType",
+    "domain": "schema:domainIncludes"
+  }
+}

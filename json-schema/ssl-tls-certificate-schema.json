@@ -1,0 +1,139 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://www.example.com/schemas/tls-certificate",
+  "title": "SSL/TLS Certificate",
+  "description": "Schema for an SSL/TLS certificate managed in a certificate management system",
+  "type": "object",
+  "required": ["id", "commonName", "notBefore", "notAfter", "status"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique certificate identifier"
+    },
+    "commonName": {
+      "type": "string",
+      "description": "Certificate common name (primary domain)"
+    },
+    "subjectAlternativeNames": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "All Subject Alternative Names in the certificate"
+    },
+    "serialNumber": {
+      "type": "string",
+      "description": "Certificate serial number in hexadecimal"
+    },
+    "issuer": {
+      "type": "string",
+      "description": "Certificate issuer distinguished name"
+    },
+    "subject": {
+      "type": "string",
+      "description": "Certificate subject distinguished name"
+    },
+    "notBefore": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Certificate validity start time"
+    },
+    "notAfter": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Certificate expiry time"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["issued", "pending", "revoked", "expired"],
+      "description": "Current certificate status"
+    },
+    "certType": {
+      "type": "string",
+      "enum": ["DV", "OV", "EV", "wildcard", "multi-domain", "private"],
+      "description": "Certificate validation type"
+    },
+    "keyAlgorithm": {
+      "type": "string",
+      "enum": ["RSA-2048", "RSA-4096", "EC-256", "EC-384"],
+      "description": "Public key algorithm and size"
+    },
+    "pem": {
+      "type": "string",
+      "description": "PEM-encoded certificate"
+    },
+    "chain": {
+      "type": "string",
+      "description": "PEM-encoded intermediate certificate chain"
+    },
+    "fingerprint": {
+      "type": "object",
+      "properties": {
+        "sha256": {
+          "type": "string",
+          "description": "SHA-256 fingerprint in hex notation"
+        },
+        "sha1": {
+          "type": "string",
+          "description": "SHA-1 fingerprint in hex notation (legacy)"
+        }
+      }
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "revokedAt": {
+      "type": ["string", "null"],
+      "format": "date-time"
+    },
+    "revocationReason": {
+      "type": ["string", "null"],
+      "enum": ["unspecified", "keyCompromise", "affiliationChanged", "superseded", "cessationOfOperation", null]
+    }
+  },
+  "$defs": {
+    "CertificateOrder": {
+      "type": "object",
+      "required": ["id", "status", "domains"],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["pending", "processing", "valid", "invalid", "expired"]
+        },
+        "domains": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "challenges": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Challenge"
+          }
+        },
+        "certificateId": {
+          "type": ["string", "null"]
+        }
+      }
+    },
+    "Challenge": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "type": {
+          "type": "string",
+          "enum": ["http-01", "dns-01", "tls-alpn-01"]
+        },
+        "domain": { "type": "string" },
+        "status": {
+          "type": "string",
+          "enum": ["pending", "processing", "valid", "invalid"]
+        },
+        "token": { "type": "string" }
+      }
+    }
+  }
+}

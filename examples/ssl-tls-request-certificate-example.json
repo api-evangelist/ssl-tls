@@ -1,0 +1,55 @@
+{
+  "example": "Request DV Certificate",
+  "operation": "requestCertificate",
+  "request": {
+    "method": "POST",
+    "url": "https://api.certmanager.example.com/v1/certificates",
+    "headers": {
+      "X-API-Key": "sk-cert-abc123...",
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "domains": ["www.example.com", "example.com"],
+      "certType": "DV",
+      "keyAlgorithm": "EC-256",
+      "validityDays": 90,
+      "challengeType": "http-01"
+    }
+  },
+  "response": {
+    "status": 201,
+    "contentType": "application/json",
+    "body": {
+      "id": "order-xyz789",
+      "status": "pending",
+      "domains": ["www.example.com", "example.com"],
+      "challenges": [
+        {
+          "id": "chal-001",
+          "type": "http-01",
+          "domain": "www.example.com",
+          "status": "pending",
+          "token": "DgyXjqBmFkVldG5eL5fO4Q_wJBFJ1ZvpS3b8K9mN",
+          "validationRecord": {
+            "url": "http://www.example.com/.well-known/acme-challenge/DgyXjqBmFkVldG5eL5fO4Q_wJBFJ1ZvpS3b8K9mN",
+            "expectedContent": "DgyXjqBmFkVldG5eL5fO4Q_wJBFJ1ZvpS3b8K9mN.keyAuth..."
+          }
+        },
+        {
+          "id": "chal-002",
+          "type": "http-01",
+          "domain": "example.com",
+          "status": "pending",
+          "token": "AbCdEfGhIjKlMnOpQrStUvWxYz1234567890ABCD",
+          "validationRecord": {
+            "url": "http://example.com/.well-known/acme-challenge/AbCdEfGhIjKlMnOpQrStUvWxYz1234567890ABCD",
+            "expectedContent": "AbCdEfGhIjKlMnOpQrStUvWxYz1234567890ABCD.keyAuth..."
+          }
+        }
+      ],
+      "certificateId": null,
+      "expiresAt": "2026-05-09T10:15:00Z",
+      "createdAt": "2026-05-02T10:15:00Z"
+    }
+  }
+}

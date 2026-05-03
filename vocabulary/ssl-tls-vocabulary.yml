@@ -1,0 +1,161 @@
+vocabulary:
+  name: SSL/TLS Vocabulary
+  description: >-
+    Key terms, concepts, and operational vocabulary for SSL/TLS (Secure Sockets
+    Layer / Transport Layer Security) protocols, public key infrastructure (PKI),
+    certificate management, and TLS configuration.
+  version: "1.0"
+  created: "2026-05-02"
+  modified: "2026-05-02"
+  tags:
+    - SSL/TLS
+    - Cryptography
+    - PKI
+    - Security
+
+  terms:
+    - term: TLS
+      label: Transport Layer Security
+      description: >-
+        The current standard cryptographic protocol (successor to SSL) that
+        provides authentication, confidentiality, and integrity for internet
+        communications. TLS 1.3 (RFC 8446) is the current version, providing
+        improved performance and security over TLS 1.2.
+      category: Protocol
+
+    - term: SSL
+      label: Secure Sockets Layer
+      description: >-
+        The predecessor to TLS. SSL 3.0 and earlier versions are deprecated
+        and considered insecure (POODLE vulnerability). The term "SSL" is often
+        colloquially used to refer to TLS, including in "SSL certificate."
+      category: Protocol
+
+    - term: X.509
+      label: X.509 Certificate
+      description: >-
+        The standard format for public key certificates defined in RFC 5280.
+        X.509 certificates bind a public key to an identity (domain, organization)
+        and are signed by a Certificate Authority. TLS/HTTPS uses X.509 certificates.
+      category: Certificates
+
+    - term: Certificate Authority
+      label: Certificate Authority
+      description: >-
+        A trusted entity that issues digital certificates binding public keys
+        to identities. Major public CAs include Let's Encrypt (free, automated),
+        DigiCert, Sectigo, and GlobalSign. Private CAs manage internal certificates.
+      category: PKI
+
+    - term: DV Certificate
+      label: Domain Validated Certificate
+      description: >-
+        A certificate where the CA verifies only that the applicant controls
+        the domain (via HTTP-01, DNS-01, or email challenge). The most common
+        type, issued quickly and automatically. Let's Encrypt issues DV certs only.
+      category: Certificate Types
+
+    - term: OV Certificate
+      label: Organization Validated Certificate
+      description: >-
+        A certificate where the CA verifies both domain control and the
+        organization's legal identity. Displays the organization name in
+        certificate details but not in the browser address bar.
+      category: Certificate Types
+
+    - term: EV Certificate
+      label: Extended Validation Certificate
+      description: >-
+        A certificate requiring rigorous vetting of the organization's legal
+        identity. Previously showed a green bar in browsers, but modern browsers
+        have removed the visual distinction. Still provides stronger identity
+        assurance for regulated industries.
+      category: Certificate Types
+
+    - term: SAN
+      label: Subject Alternative Name
+      description: >-
+        An X.509 extension listing additional hostnames, IPs, or email addresses
+        the certificate covers. Modern certificates use SAN (not CN) for domain
+        names. A single certificate can cover dozens of SANs.
+      category: Certificates
+
+    - term: Wildcard Certificate
+      label: Wildcard Certificate
+      description: >-
+        A certificate with a wildcard SAN (*.example.com) that covers all
+        first-level subdomains of a domain. Cannot cover the apex domain or
+        nested subdomains (*.*.example.com). Not issuable via HTTP-01 challenge.
+      category: Certificate Types
+
+    - term: ACME
+      label: Automatic Certificate Management Environment
+      description: >-
+        A protocol (RFC 8555) for automated certificate issuance and renewal.
+        Used by Let's Encrypt and other CAs. Clients (Certbot, ACME.sh) automate
+        the challenge-response process for domain validation.
+      category: Protocol
+
+    - term: HTTP-01 Challenge
+      label: HTTP-01 Challenge
+      description: >-
+        An ACME domain validation method where the CA fetches a token file
+        placed at http://domain/.well-known/acme-challenge/{token}. Requires
+        port 80 access. Cannot be used for wildcard certificates.
+      category: Domain Validation
+
+    - term: DNS-01 Challenge
+      label: DNS-01 Challenge
+      description: >-
+        An ACME domain validation method where a TXT record is placed at
+        _acme-challenge.domain with a CA-specified value. Supports wildcard
+        certificates. Can be automated via DNS provider APIs.
+      category: Domain Validation
+
+    - term: CRL
+      label: Certificate Revocation List
+      description: >-
+        A list published by a CA of certificates that have been revoked before
+        their expiry. Clients download CRLs to check certificate validity. Being
+        replaced by OCSP for performance reasons.
+      category: Revocation
+
+    - term: OCSP
+      label: Online Certificate Status Protocol
+      description: >-
+        A real-time protocol for checking certificate revocation status.
+        OCSP Stapling allows servers to include pre-fetched OCSP responses
+        in the TLS handshake, improving performance.
+      category: Revocation
+
+    - term: CT Log
+      label: Certificate Transparency Log
+      description: >-
+        A public, append-only log of all issued certificates maintained as part
+        of the Certificate Transparency (RFC 6962) ecosystem. All public TLS
+        certificates must be logged. Enables detection of mis-issuance.
+      category: Security
+
+    - term: PKI
+      label: Public Key Infrastructure
+      description: >-
+        The complete system of hardware, software, policies, and procedures
+        needed to create, manage, distribute, use, store, and revoke digital
+        certificates. Includes CAs, registration authorities, and certificate stores.
+      category: Infrastructure
+
+    - term: CSR
+      label: Certificate Signing Request
+      description: >-
+        A PEM-encoded request containing a public key and identity information,
+        sent to a CA to request a certificate. The CA signs the CSR with its
+        private key to produce the certificate.
+      category: Certificates
+
+    - term: TLS 1.3
+      label: TLS 1.3
+      description: >-
+        The current TLS standard (RFC 8446, 2018), providing a faster handshake
+        (1-RTT, 0-RTT resumption), better cipher suites (only forward-secret),
+        and removal of legacy features (RSA key exchange, SHA-1, RC4).
+      category: Protocol

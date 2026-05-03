@@ -1,0 +1,566 @@
+openapi: 3.1.0
+info:
+  title: SSL/TLS Certificate Management API
+  description: >-
+    A REST API for SSL/TLS certificate lifecycle management including issuance,
+    renewal, revocation, and monitoring. Represents common certificate
+    management capabilities available across major CAs and PKI platforms
+    including Let's Encrypt ACME, DigiCert, Sectigo, and enterprise PKI systems.
+  version: "1.0"
+  contact:
+    name: Let's Encrypt
+    url: https://letsencrypt.org/
+  license:
+    name: Mozilla Public License 2.0
+    url: https://mozilla.org/MPL/2.0/
+servers:
+  - url: https://api.certmanager.example.com/v1
+    description: Certificate Management API
+
+security:
+  - ApiKeyAuth: []
+
+tags:
+  - name: Certificates
+    description: Certificate issuance and management
+  - name: Orders
+    description: Certificate order lifecycle
+  - name: Domains
+    description: Domain verification and management
+  - name: Revocation
+    description: Certificate revocation
+  - name: Monitoring
+    description: Certificate expiry monitoring
+
+paths:
+  /certificates:
+    get:
+      operationId: listCertificates
+      summary: List Certificates
+      description: >-
+        Returns a paginated list of SSL/TLS certificates in the account,
+        including their status, expiry dates, and associated domains.
+      tags:
+        - Certificates
+      parameters:
+        - name: status
+          in: query
+          description: Filter by certificate status
+          schema:
+            type: string
+            enum: [issued, pending, revoked, expired]
+        - name: domain
+          in: query
+          description: Filter by domain name
+          schema:
+            type: string
+        - name: expiringBefore
+          in: query
+          description: Filter certificates expiring before this date (ISO 8601)
+          schema:
+            type: string
+            format: date
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 50
+      responses:
+        '200':
+          description: Certificate list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CertificateListResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+    post:
+      operationId: requestCertificate
+      summary: Request Certificate
+      description: >-
+        Initiates a certificate issuance request for one or more domain names.
+        Returns an order object with challenge details for domain validation.
+      tags:
+        - Certificates
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CertificateRequest'
+      responses:
+        '201':
+          description: Certificate request created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CertificateOrder'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+
+  /certificates/{certificateId}:
+    get:
+      operationId: getCertificate
+      summary: Get Certificate
+      description: Returns full details for a specific certificate including PEM data and metadata.
+      tags:
+        - Certificates
+      parameters:
+        - $ref: '#/components/parameters/CertificateId'
+      responses:
+        '200':
+          description: Certificate details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Certificate'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /certificates/{certificateId}/download:
+    get:
+      operationId: downloadCertificate
+      summary: Download Certificate
+      description: >-
+        Downloads the certificate and certificate chain in PEM format.
+        Returns the end-entity certificate and full chain for installation.
+      tags:
+        - Certificates
+      parameters:
+        - $ref: '#/components/parameters/CertificateId'
+        - name: format
+          in: query
+          schema:
+            type: string
+            enum: [pem, pkcs12, der]
+            default: pem
+      responses:
+        '200':
+          description: Certificate file
+          content:
+            application/x-pem-file:
+              schema:
+                type: string
+            application/x-pkcs12:
+              schema:
+                type: string
+                format: binary
+
+  /certificates/{certificateId}/renew:
+    post:
+      operationId: renewCertificate
+      summary: Renew Certificate
+      description: >-
+        Initiates certificate renewal for an existing certificate. Uses the
+        same domain list and key unless overridden. Returns a new order object.
+      tags:
+        - Certificates
+      parameters:
+        - $ref: '#/components/parameters/CertificateId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                reuseKey:
+                  type: boolean
+                  default: true
+      responses:
+        '201':
+          description: Renewal order created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CertificateOrder'
+
+  /certificates/{certificateId}/revoke:
+    post:
+      operationId: revokeCertificate
+      summary: Revoke Certificate
+      description: >-
+        Revokes a certificate, making it immediately invalid. Revoked certificates
+        appear in the CA's CRL and OCSP responses. Provide a reason code.
+      tags:
+        - Revocation
+      parameters:
+        - $ref: '#/components/parameters/CertificateId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RevocationRequest'
+      responses:
+        '200':
+          description: Certificate revoked
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Certificate'
+
+  /orders:
+    get:
+      operationId: listOrders
+      summary: List Orders
+      description: Returns a list of certificate orders with their current status and validation state.
+      tags:
+        - Orders
+      parameters:
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [pending, processing, valid, invalid, expired]
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+      responses:
+        '200':
+          description: Order list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderListResponse'
+
+  /orders/{orderId}:
+    get:
+      operationId: getOrder
+      summary: Get Order
+      description: Returns the current status of a certificate order including challenge status.
+      tags:
+        - Orders
+      parameters:
+        - name: orderId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Order details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CertificateOrder'
+
+  /orders/{orderId}/challenges/{challengeId}/verify:
+    post:
+      operationId: verifyChallenge
+      summary: Verify Domain Challenge
+      description: >-
+        Notifies the CA to verify a completed domain ownership challenge.
+        The CA will check for the expected token at the challenge URL or
+        DNS record. Once verified, the order can proceed to certificate issuance.
+      tags:
+        - Domains
+      parameters:
+        - name: orderId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: challengeId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Verification triggered
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Challenge'
+
+  /domains:
+    get:
+      operationId: listDomains
+      summary: List Domains
+      description: Returns all domains registered in the account with their validation status.
+      tags:
+        - Domains
+      responses:
+        '200':
+          description: Domain list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DomainListResponse'
+
+  /monitoring/expiring:
+    get:
+      operationId: getExpiringCertificates
+      summary: Get Expiring Certificates
+      description: >-
+        Returns certificates expiring within the specified number of days.
+        Use this for automated renewal workflows and alerting.
+      tags:
+        - Monitoring
+      parameters:
+        - name: days
+          in: query
+          description: Number of days to look ahead for expiring certificates
+          schema:
+            type: integer
+            default: 30
+            minimum: 1
+            maximum: 90
+      responses:
+        '200':
+          description: Expiring certificates
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CertificateListResponse'
+
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+
+  parameters:
+    CertificateId:
+      name: certificateId
+      in: path
+      required: true
+      description: Certificate identifier
+      schema:
+        type: string
+
+  responses:
+    Unauthorized:
+      description: Authentication required
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    BadRequest:
+      description: Invalid request data
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+
+  schemas:
+    Certificate:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique certificate identifier
+        commonName:
+          type: string
+          description: Certificate common name (primary domain)
+        subjectAlternativeNames:
+          type: array
+          items:
+            type: string
+          description: All SANs in the certificate
+        serialNumber:
+          type: string
+          description: Certificate serial number (hex)
+        issuer:
+          type: string
+          description: Certificate issuer distinguished name
+        subject:
+          type: string
+          description: Certificate subject distinguished name
+        notBefore:
+          type: string
+          format: date-time
+          description: Certificate validity start
+        notAfter:
+          type: string
+          format: date-time
+          description: Certificate expiry
+        status:
+          type: string
+          enum: [issued, pending, revoked, expired]
+        certType:
+          type: string
+          enum: [DV, OV, EV, wildcard, multi-domain, private]
+        pem:
+          type: string
+          description: PEM-encoded certificate
+        chain:
+          type: string
+          description: PEM-encoded intermediate chain
+        keyAlgorithm:
+          type: string
+          enum: [RSA-2048, RSA-4096, EC-256, EC-384]
+        fingerprint:
+          type: object
+          properties:
+            sha256:
+              type: string
+            sha1:
+              type: string
+        createdAt:
+          type: string
+          format: date-time
+        revokedAt:
+          type: string
+          format: date-time
+          nullable: true
+        revocationReason:
+          type: string
+          nullable: true
+
+    CertificateRequest:
+      type: object
+      required: [domains]
+      properties:
+        domains:
+          type: array
+          items:
+            type: string
+          description: Domain names to include in the certificate
+        certType:
+          type: string
+          enum: [DV, OV, EV]
+          default: DV
+        keyAlgorithm:
+          type: string
+          enum: [RSA-2048, RSA-4096, EC-256, EC-384]
+          default: EC-256
+        validityDays:
+          type: integer
+          description: Certificate validity in days (max 90 for DV, 398 for OV/EV)
+          default: 90
+        challengeType:
+          type: string
+          enum: [http-01, dns-01, tls-alpn-01]
+          default: http-01
+        csr:
+          type: string
+          description: Optional CSR in PEM format (if key is managed client-side)
+
+    CertificateOrder:
+      type: object
+      properties:
+        id:
+          type: string
+        status:
+          type: string
+          enum: [pending, processing, valid, invalid, expired]
+        domains:
+          type: array
+          items:
+            type: string
+        challenges:
+          type: array
+          items:
+            $ref: '#/components/schemas/Challenge'
+        certificateId:
+          type: string
+          nullable: true
+          description: Set when status is valid
+        expiresAt:
+          type: string
+          format: date-time
+        createdAt:
+          type: string
+          format: date-time
+
+    Challenge:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+          enum: [http-01, dns-01, tls-alpn-01]
+        domain:
+          type: string
+        status:
+          type: string
+          enum: [pending, processing, valid, invalid]
+        token:
+          type: string
+          description: Challenge token to deploy
+        validationRecord:
+          type: object
+          description: Expected record (URL for http-01, DNS record for dns-01)
+
+    RevocationRequest:
+      type: object
+      required: [reason]
+      properties:
+        reason:
+          type: string
+          enum: [unspecified, keyCompromise, affiliationChanged, superseded, cessationOfOperation]
+
+    CertificateListResponse:
+      type: object
+      properties:
+        certificates:
+          type: array
+          items:
+            $ref: '#/components/schemas/Certificate'
+        total:
+          type: integer
+        page:
+          type: integer
+
+    OrderListResponse:
+      type: object
+      properties:
+        orders:
+          type: array
+          items:
+            $ref: '#/components/schemas/CertificateOrder'
+        total:
+          type: integer
+
+    Domain:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        validationStatus:
+          type: string
+          enum: [unverified, pending, verified, failed]
+        validationMethod:
+          type: string
+          enum: [http-01, dns-01, tls-alpn-01, email]
+
+    DomainListResponse:
+      type: object
+      properties:
+        domains:
+          type: array
+          items:
+            $ref: '#/components/schemas/Domain'
+        total:
+          type: integer
+
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+        message:
+          type: string
+        details:
+          type: array
+          items:
+            type: string

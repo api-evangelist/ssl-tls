@@ -1,0 +1,38 @@
+{
+  "example": "List Certificates Expiring Soon",
+  "operation": "listCertificates",
+  "request": {
+    "method": "GET",
+    "url": "https://api.certmanager.example.com/v1/certificates?status=issued&expiringBefore=2026-06-01",
+    "headers": {
+      "X-API-Key": "sk-cert-abc123...",
+      "Content-Type": "application/json"
+    }
+  },
+  "response": {
+    "status": 200,
+    "contentType": "application/json",
+    "body": {
+      "certificates": [
+        {
+          "id": "cert-abc123",
+          "commonName": "api.example.com",
+          "subjectAlternativeNames": ["api.example.com", "api2.example.com"],
+          "serialNumber": "03:d7:8e:9a:2b:4c",
+          "issuer": "CN=Let's Encrypt Authority X3, O=Let's Encrypt, C=US",
+          "notBefore": "2026-03-01T00:00:00Z",
+          "notAfter": "2026-05-30T23:59:59Z",
+          "status": "issued",
+          "certType": "DV",
+          "keyAlgorithm": "EC-256",
+          "fingerprint": {
+            "sha256": "AB:CD:EF:12:34:56:78:90:AB:CD:EF:12:34:56:78:90:AB:CD:EF:12:34:56:78:90:AB:CD:EF:12:34:56:78"
+          },
+          "createdAt": "2026-03-01T10:00:00Z"
+        }
+      ],
+      "total": 3,
+      "page": 1
+    }
+  }
+}
