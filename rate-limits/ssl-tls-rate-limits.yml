@@ -4,98 +4,73 @@ schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main
 provider: SSL/TLS
 providerId: ssl-tls
 created: '2026-05-04'
-modified: '2026-05-04'
+modified: '2026-05-05'
+reconciled: true
 tags:
   - SSL/TLS
   - TLS
   - Certificates
   - PKI
-  - Cryptography
   - Certificate Authority
-  - HTTPS
   - Rate Limiting
-  - Quotas
-  - Throttling
-description: Machine-readable rate limit definitions for the SSL/TLS API surface. Captures per-tier quotas,
-  burst behavior, response signaling, and recovery semantics. Defaults are scaffold values to be replaced
-  with published provider limits.
+description: Multi-vendor category covering ACME and CA-issuance APIs. Let's Encrypt publishes concrete per-account, per-IP, and per-domain limits on the ACME v2 endpoint; DigiCert and Sectigo gate API throughput per partner contract and do not publish numeric per-second limits. Numbers below are sourced from Let's Encrypt's public rate-limit documentation.
+sources:
+  - https://letsencrypt.org/docs/rate-limits/
+  - https://dev.digicert.com/services-api/
+  - https://sectigo.com/resource-library/cert-manager-api-documentation
 headers:
-  limit: X-RateLimit-Limit
-  remaining: X-RateLimit-Remaining
-  reset: X-RateLimit-Reset
   retryAfter: Retry-After
-  policy: RateLimit-Policy
 responseCodes:
   throttled: 429
-  quotaExceeded: 429
-  serviceUnavailable: 503
+  rateLimited: 429
 limits:
-  - tier: free
-    name: Free Tier Default
-    scope: api-key
-    metric: requests_per_minute
+  - name: Let's Encrypt - Certificates per Registered Domain
+    scope: registered-domain
+    metric: certificates
+    limit: 50
+    timeFrame: week
+    notes: 'Refills at 1 certificate per 202 minutes. Override available via Let''s Encrypt rate-limit override form.'
+  - name: Let's Encrypt - Duplicate Certificates
+    scope: identifier-set
+    metric: certificates
+    limit: 5
+    timeFrame: week
+    notes: Same exact set of identifiers; refills at 1 certificate per 34 hours.
+  - name: Let's Encrypt - New Accounts per IP
+    scope: IP
+    metric: accounts
     limit: 10
-    burst: 20
-    timeFrame: minute
-    applies:
-      - Let's Encrypt ACME API
-      - DigiCert Certificate Management API
-      - Sectigo Certificate Manager API
-  - tier: free
-    name: Free Tier Monthly Quota
-    scope: api-key
-    metric: requests_per_month
-    limit: 1000
-    timeFrame: month
-    applies:
-      - Let's Encrypt ACME API
-      - DigiCert Certificate Management API
-      - Sectigo Certificate Manager API
-  - tier: professional
-    name: Professional Tier Default
-    scope: api-key
-    metric: requests_per_minute
-    limit: 100
-    burst: 200
-    timeFrame: minute
-    applies:
-      - Let's Encrypt ACME API
-      - DigiCert Certificate Management API
-      - Sectigo Certificate Manager API
-  - tier: professional
-    name: Professional Tier Monthly Quota
-    scope: api-key
-    metric: requests_per_month
-    limit: 100000
-    timeFrame: month
-    applies:
-      - Let's Encrypt ACME API
-      - DigiCert Certificate Management API
-      - Sectigo Certificate Manager API
-  - tier: enterprise
-    name: Enterprise Negotiated Limit
-    scope: contract
-    metric: requests_per_minute
-    limit: 1000
-    burst: 5000
-    timeFrame: minute
-    applies:
-      - Let's Encrypt ACME API
-      - DigiCert Certificate Management API
-      - Sectigo Certificate Manager API
+    timeFrame: 3h
+    notes: Refills at 1 account per 18 minutes. No overrides available.
+  - name: Let's Encrypt - New Orders per Account
+    scope: account
+    metric: orders
+    limit: 300
+    timeFrame: 3h
+    notes: Refills at 1 order per 36 seconds. Overrides available upon request.
+  - name: Let's Encrypt - Failed Validations per Account per Identifier
+    scope: account/identifier
+    metric: failures
+    limit: 5
+    timeFrame: hour
+    notes: Refills at 1 per identifier every 12 minutes. No overrides available.
+  - name: DigiCert Services API
+    scope: account/contract
+    metric: varies
+    limit: per partner contract; not publicly documented
+    notes: DigiCert gates API throughput through the partner agreement; consult your account team.
+  - name: Sectigo Certificate Manager API
+    scope: account/contract
+    metric: varies
+    limit: per partner contract; not publicly documented
+    notes: Sectigo enforces throughput per Cert Manager license; consult your account team.
 policies:
-  - name: Backoff Strategy
-    description: Clients should implement exponential backoff with jitter, honoring the Retry-After header
-      when present.
-  - name: Burst Handling
-    description: Short bursts above the steady-state limit are tolerated up to the documented burst ceiling
-      before throttling engages.
-  - name: Quota Reset
-    description: Monthly quotas reset at the start of each calendar month in UTC. Per-minute and per-second
-      windows reset on a sliding-window basis.
-  - name: Fair Use
-    description: Even on uncapped enterprise tiers, sustained usage that materially impacts shared infrastructure
-      may be subject to fair-use throttling.
+  - name: ACME Backoff
+    description: Let's Encrypt returns 429 with a Retry-After header (sometimes embedded in the error message as 'retry after <UTC time>'); ACME clients (certbot, lego, acme.sh) honor this automatically and retry at the indicated time.
+  - name: Staging Environment First
+    description: Let's Encrypt strongly recommends developing against the staging endpoint (acme-staging-v02.api.letsencrypt.org) where rate limits are much higher, before pointing automation at production.
+  - name: Override by Request
+    description: New-orders-per-account and certificates-per-registered-domain caps can be raised via Let's Encrypt's public rate-limit override form for organizations with documented legitimate need. Account-per-IP and failed-validation caps cannot be overridden.
 maintainers:
-  - FN: Kin Lane
-    email: kin@apievangelist.com
+  - name: API Evangelist
+    url: https://apievangelist.com

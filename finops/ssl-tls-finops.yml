@@ -1,153 +1,62 @@
 specification: FinOps Framework
 specificationVersion: '1.0'
+schema: https://www.finops.org/framework/
+provider: SSL/TLS
+providerId: ssl-tls
+created: '2026-05-04'
+modified: '2026-05-05'
+reconciled: false
+tags:
+  - SSL/TLS
+  - TLS
+  - Certificates
+  - PKI
+  - FinOps
+  - FOCUS
+description: SSL/TLS is a multi-vendor category index. Cost surfaces vary by certificate authority - Let's Encrypt is free; DigiCert and Sectigo bill per certificate per validation level under partner contracts. There is no single FOCUS-aligned billing model for the category; per-vendor finops artifacts should live in vendor-specific repos.
+sources:
+  - https://letsencrypt.org/
+  - https://www.digicert.com/
+  - https://www.sectigo.com/
+notes: No unified billing surface. FOCUS columns are placeholders; replace with per-vendor entries (Let's Encrypt = $0, DigiCert / Sectigo = per-certificate per-contract).
 alignedWith:
   framework: FinOps Foundation Framework
   frameworkUrl: https://www.finops.org/framework/
   dataSpec: FOCUS
   dataSpecVersion: '1.3'
   dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/
-provider: SSL/TLS
-providerId: ssl-tls
-publisherName: SSL/TLS
-serviceCategory: API
-created: '2026-05-04'
-modified: '2026-05-04'
-tags:
-  - SSL/TLS
-  - TLS
-  - Certificates
-  - PKI
-  - Cryptography
-  - Certificate Authority
-  - HTTPS
-  - FinOps
-  - Cost Management
-  - FOCUS
-description: FinOps framework definition for the SSL/TLS API surface. Provides a FOCUS-aligned mapping
-  for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
-principles:
-  - name: Visibility
-    description: Make API consumption costs visible to engineering, product, and finance teams in near
-      real-time.
-  - name: Allocation
-    description: Tag every chargeable API call with the consuming team, environment, application, and
-      feature so cost can be allocated.
-  - name: Optimization
-    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce
-      cost per useful unit of work.
-  - name: Accountability
-    description: Establish budget owners and chargeback or showback flows for each consuming team.
-domains:
-  - name: Understand Usage and Cost
-    capabilities:
-      - Data Ingestion
-      - Allocation
-      - Reporting and Analytics
-      - Anomaly Management
-  - name: Quantify Business Value
-    capabilities:
-      - Planning and Estimating
-      - Forecasting
-      - Budgeting
-      - Benchmarking
-      - Unit Economics
-  - name: Optimize Usage and Cost
-    capabilities:
-      - Architecting for Cloud
-      - Rate Optimization
-      - Workload Optimization
-      - Cloud Sustainability
-      - Licensing and SaaS
-  - name: Manage the FinOps Practice
-    capabilities:
-      - FinOps Practice Operations
-      - FinOps Education and Enablement
-      - Invoicing and Chargeback
-      - Onboarding Workloads
-      - Intersecting Disciplines
+publisherName: Multiple Certificate Authorities
+serviceCategory: Identity
 billingModel:
-  pricingCategory: Usage-Based
-  billingFrequency: Monthly
+  pricingCategory: Mixed (Free + Per-Certificate)
+  billingFrequency: Per-Invoice
   billingCurrency: USD
   chargeCategories:
-    - Usage
     - Purchase
-    - Tax
-    - Credit
-    - Adjustment
-  chargeFrequency: Recurring
 focusColumns:
   ServiceName: SSL/TLS
-  ServiceCategory: Developer Tools / API
+  ServiceCategory: Identity
   ProviderName: SSL/TLS
-  PublisherName: SSL/TLS
-  InvoiceIssuerName: SSL/TLS
-  PricingCategory: Usage-Based
-  PricingUnit: request
+  PublisherName: Multiple
+  InvoiceIssuerName: Per Vendor
   BillingCurrency: USD
-  ChargeCategory: Usage
 meters:
-  - name: api_requests
-    description: Count of billable API requests
-    unit: request
-    aggregation: sum
+  - name: certificate_issuance
+    unit: certificate
+    aggregation: count
     dimensions:
-      - api
-      - endpoint
-      - tier
-      - region
-      - consumer
-  - name: data_egress
-    description: Bytes returned over the network in API responses
-    unit: GB
-    aggregation: sum
-    dimensions:
-      - api
-      - region
-      - consumer
-  - name: compute_seconds
-    description: Server-side compute consumed by the request, where applicable
-    unit: second
-    aggregation: sum
-    dimensions:
-      - api
-      - endpoint
-      - tier
-apis:
-  - name: Let's Encrypt ACME API
-    baseURL: https://acme-v02.api.letsencrypt.org/directory
-    tags:
-      - SSL/TLS
-      - Certificate Authority
-      - ACME
-      - Let's Encrypt
-      - HTTPS
-    serviceName: Let's Encrypt ACME API
-    serviceCategory: API
-  - name: DigiCert Certificate Management API
-    baseURL: https://www.digicert.com/services/v2
-    tags:
-      - SSL/TLS
-      - Certificate Authority
-      - Enterprise PKI
-      - DigiCert
-    serviceName: DigiCert Certificate Management API
-    serviceCategory: API
-  - name: Sectigo Certificate Manager API
-    baseURL: https://cert-manager.com/api
-    tags:
-      - SSL/TLS
-      - Certificate Authority
-      - Enterprise PKI
-    serviceName: Sectigo Certificate Manager API
-    serviceCategory: API
-unitEconomics:
-  - name: Cost per 1K Requests
-    metric: billed_cost / (api_requests / 1000)
-    target: TBD
-  - name: Cost per Active Consumer
-    metric: billed_cost / active_consumers
-    target: TBD
+      - certificate_authority
+      - validation_level
+      - term_length
+principles:
+  - name: Visibility
+    description: Inventory issued certificates via each CA's portal or API (DigiCert Services API, Sectigo Cert Manager, Let's Encrypt ACME account orders endpoint). Aggregate into a single CMDB / certificate-lifecycle tool to see total spend across CAs.
+  - name: Allocation
+    description: Allocate per-certificate cost to the team that owns the hostname. Tag certificates with team/product at issuance; for ACME automation, derive ownership from the requesting service principal.
+  - name: Optimization
+    description: Default to Let's Encrypt for DV use cases (free, fully automated); reserve OV/EV from paid CAs for explicit business-identity requirements. Consolidate wildcard certificates where possible to reduce per-cert charges.
+  - name: Accountability
+    description: PKI / platform-security team owns the CA contracts and renewal cadence; product teams own remediation when their certificates approach expiry or fail validation.
 maintainers:
-  - FN: Kin Lane
-    email: kin@apievangelist.com
+  - name: API Evangelist
+    url: https://apievangelist.com
