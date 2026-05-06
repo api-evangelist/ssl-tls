@@ -1,265 +1,433 @@
-naftiko: "1.0.0-alpha1"
-
+naftiko: 1.0.0-alpha2
 info:
-  label: "SSL/TLS Certificate Lifecycle"
-  description: >-
-    Unified workflow capability for SSL/TLS certificate lifecycle management.
-    Enables security and infrastructure teams to request, monitor, renew, and
-    revoke TLS certificates across domains. Combines certificate issuance,
-    automated renewal workflows, expiry monitoring, and domain verification
-    into a single operational interface.
+  label: SSL/TLS Certificate Lifecycle
+  description: Unified workflow capability for SSL/TLS certificate lifecycle management. Enables security and infrastructure
+    teams to request, monitor, renew, and revoke TLS certificates across domains. Combines certificate issuance, automated
+    renewal workflows, expiry monitoring, and domain verification into a single operational interface.
   tags:
-    - SSL/TLS
-    - Certificate Management
-    - PKI
-    - HTTPS
-    - Security
-    - Certificate Authority
-  created: "2026-05-02"
-  modified: "2026-05-02"
-
+  - SSL/TLS
+  - Certificate Management
+  - PKI
+  - HTTPS
+  - Security
+  - Certificate Authority
+  created: '2026-05-02'
+  modified: '2026-05-06'
 binds:
-  - namespace: env
-    keys:
-      CERT_MANAGER_API_KEY: CERT_MANAGER_API_KEY
-
+- namespace: env
+  keys:
+    CERT_MANAGER_API_KEY: CERT_MANAGER_API_KEY
 capability:
   consumes:
-    - import: ssl-tls-cert-mgmt
-      location: ./shared/certificate-management.yaml
-
+  - type: http
+    namespace: ssl-tls-cert-mgmt
+    baseUri: https://api.certmanager.example.com/v1
+    description: SSL/TLS Certificate Management API
+    authentication:
+      type: apikey
+      key: X-API-Key
+      value: '{{CERT_MANAGER_API_KEY}}'
+      placement: header
+    resources:
+    - name: certificates
+      path: /certificates
+      description: Certificate issuance and management
+      operations:
+      - name: list-certificates
+        method: GET
+        description: List SSL/TLS certificates
+        inputParameters:
+        - name: status
+          in: query
+          type: string
+          required: false
+        - name: domain
+          in: query
+          type: string
+          required: false
+        - name: expiringBefore
+          in: query
+          type: string
+          required: false
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: request-certificate
+        method: POST
+        description: Request a new certificate
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        body:
+          type: json
+          data:
+            domains: '{{tools.domains}}'
+            certType: '{{tools.certType}}'
+    - name: certificate-by-id
+      path: /certificates/{certificateId}
+      description: Individual certificate management
+      operations:
+      - name: get-certificate
+        method: GET
+        description: Get certificate details
+        inputParameters:
+        - name: certificateId
+          in: path
+          type: string
+          required: true
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: certificate-download
+      path: /certificates/{certificateId}/download
+      description: Certificate download
+      operations:
+      - name: download-certificate
+        method: GET
+        description: Download certificate in PEM format
+        inputParameters:
+        - name: certificateId
+          in: path
+          type: string
+          required: true
+        - name: format
+          in: query
+          type: string
+          required: false
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: certificate-renew
+      path: /certificates/{certificateId}/renew
+      description: Certificate renewal
+      operations:
+      - name: renew-certificate
+        method: POST
+        description: Renew an existing certificate
+        inputParameters:
+        - name: certificateId
+          in: path
+          type: string
+          required: true
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: certificate-revoke
+      path: /certificates/{certificateId}/revoke
+      description: Certificate revocation
+      operations:
+      - name: revoke-certificate
+        method: POST
+        description: Revoke a certificate
+        inputParameters:
+        - name: certificateId
+          in: path
+          type: string
+          required: true
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: orders
+      path: /orders
+      description: Certificate order management
+      operations:
+      - name: list-orders
+        method: GET
+        description: List certificate orders
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: order-by-id
+      path: /orders/{orderId}
+      description: Order details
+      operations:
+      - name: get-order
+        method: GET
+        description: Get certificate order details
+        inputParameters:
+        - name: orderId
+          in: path
+          type: string
+          required: true
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: domains
+      path: /domains
+      description: Domain management
+      operations:
+      - name: list-domains
+        method: GET
+        description: List registered domains
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: monitoring-expiring
+      path: /monitoring/expiring
+      description: Certificate expiry monitoring
+      operations:
+      - name: get-expiring-certificates
+        method: GET
+        description: Get certificates expiring within N days
+        inputParameters:
+        - name: days
+          in: query
+          type: integer
+          required: false
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
   exposes:
-    - type: rest
-      port: 8080
-      namespace: ssl-tls-cert-lifecycle-api
-      description: "Unified REST API for SSL/TLS certificate lifecycle management."
-      resources:
-        - path: /v1/certificates
-          name: certificates
-          description: "Certificate management"
-          operations:
-            - method: GET
-              name: list-certificates
-              description: "List certificates with optional status and domain filtering"
-              call: "ssl-tls-cert-mgmt.list-certificates"
-              with:
-                status: "rest.status"
-                domain: "rest.domain"
-                expiringBefore: "rest.expiringBefore"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-            - method: POST
-              name: request-certificate
-              description: "Request a new SSL/TLS certificate for domain validation"
-              call: "ssl-tls-cert-mgmt.request-certificate"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-        - path: /v1/certificates/{certificateId}
-          name: certificate-detail
-          description: "Certificate details"
-          operations:
-            - method: GET
-              name: get-certificate
-              description: "Get certificate details and PEM data"
-              call: "ssl-tls-cert-mgmt.get-certificate"
-              with:
-                certificateId: "rest.certificateId"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-        - path: /v1/certificates/{certificateId}/download
-          name: certificate-download
-          description: "Download certificate"
-          operations:
-            - method: GET
-              name: download-certificate
-              description: "Download certificate in PEM or PKCS12 format"
-              call: "ssl-tls-cert-mgmt.download-certificate"
-              with:
-                certificateId: "rest.certificateId"
-                format: "rest.format"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-        - path: /v1/certificates/{certificateId}/renew
-          name: certificate-renew
-          description: "Certificate renewal"
-          operations:
-            - method: POST
-              name: renew-certificate
-              description: "Initiate certificate renewal"
-              call: "ssl-tls-cert-mgmt.renew-certificate"
-              with:
-                certificateId: "rest.certificateId"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-        - path: /v1/certificates/{certificateId}/revoke
-          name: certificate-revoke
-          description: "Certificate revocation"
-          operations:
-            - method: POST
-              name: revoke-certificate
-              description: "Revoke a certificate with reason code"
-              call: "ssl-tls-cert-mgmt.revoke-certificate"
-              with:
-                certificateId: "rest.certificateId"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-        - path: /v1/orders
-          name: orders
-          description: "Certificate orders"
-          operations:
-            - method: GET
-              name: list-orders
-              description: "List certificate orders"
-              call: "ssl-tls-cert-mgmt.list-orders"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-        - path: /v1/orders/{orderId}
-          name: order-detail
-          description: "Order details and challenges"
-          operations:
-            - method: GET
-              name: get-order
-              description: "Get order details with challenge status"
-              call: "ssl-tls-cert-mgmt.get-order"
-              with:
-                orderId: "rest.orderId"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-        - path: /v1/domains
-          name: domains
-          description: "Domain validation status"
-          operations:
-            - method: GET
-              name: list-domains
-              description: "List domains and validation status"
-              call: "ssl-tls-cert-mgmt.list-domains"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-        - path: /v1/monitoring/expiring
-          name: expiring-certificates
-          description: "Expiry monitoring"
-          operations:
-            - method: GET
-              name: get-expiring-certificates
-              description: "Get certificates expiring within N days"
-              call: "ssl-tls-cert-mgmt.get-expiring-certificates"
-              with:
-                days: "rest.days"
-              outputParameters:
-                - type: object
-                  mapping: "$."
-
-    - type: mcp
-      port: 9090
-      namespace: ssl-tls-cert-lifecycle-mcp
-      transport: http
-      description: "MCP server for AI-assisted SSL/TLS certificate lifecycle management."
-      tools:
-        - name: list-certificates
-          description: "List SSL/TLS certificates with optional status, domain, and expiry filtering"
-          hints:
-            readOnly: true
-            idempotent: true
-          call: "ssl-tls-cert-mgmt.list-certificates"
-          with:
-            status: "tools.status"
-            domain: "tools.domain"
-            expiringBefore: "tools.expiringBefore"
-          outputParameters:
-            - type: object
-              mapping: "$."
-        - name: get-certificate
-          description: "Get SSL/TLS certificate details including PEM, chain, and metadata"
-          hints:
-            readOnly: true
-            idempotent: true
-          call: "ssl-tls-cert-mgmt.get-certificate"
-          with:
-            certificateId: "tools.certificateId"
-          outputParameters:
-            - type: object
-              mapping: "$."
-        - name: request-certificate
-          description: "Request a new SSL/TLS certificate for one or more domains"
-          hints:
-            readOnly: false
-            idempotent: false
-          call: "ssl-tls-cert-mgmt.request-certificate"
-          outputParameters:
-            - type: object
-              mapping: "$."
-        - name: download-certificate
-          description: "Download SSL/TLS certificate in PEM or PKCS12 format"
-          hints:
-            readOnly: true
-            idempotent: true
-          call: "ssl-tls-cert-mgmt.download-certificate"
-          with:
-            certificateId: "tools.certificateId"
-            format: "tools.format"
-          outputParameters:
-            - type: object
-              mapping: "$."
-        - name: renew-certificate
-          description: "Initiate renewal for an existing SSL/TLS certificate"
-          hints:
-            readOnly: false
-            idempotent: false
-          call: "ssl-tls-cert-mgmt.renew-certificate"
-          with:
-            certificateId: "tools.certificateId"
-          outputParameters:
-            - type: object
-              mapping: "$."
-        - name: revoke-certificate
-          description: "Revoke an SSL/TLS certificate with a reason code"
-          hints:
-            readOnly: false
-            destructive: true
-            idempotent: true
-          call: "ssl-tls-cert-mgmt.revoke-certificate"
-          with:
-            certificateId: "tools.certificateId"
-          outputParameters:
-            - type: object
-              mapping: "$."
-        - name: get-order
-          description: "Get certificate order status including domain validation challenges"
-          hints:
-            readOnly: true
-            idempotent: true
-          call: "ssl-tls-cert-mgmt.get-order"
-          with:
-            orderId: "tools.orderId"
-          outputParameters:
-            - type: object
-              mapping: "$."
-        - name: list-domains
-          description: "List domains and their certificate validation status"
-          hints:
-            readOnly: true
-            idempotent: true
-          call: "ssl-tls-cert-mgmt.list-domains"
-          outputParameters:
-            - type: object
-              mapping: "$."
-        - name: get-expiring-certificates
-          description: "Get SSL/TLS certificates expiring within the next N days for proactive renewal"
-          hints:
-            readOnly: true
-            idempotent: true
-          call: "ssl-tls-cert-mgmt.get-expiring-certificates"
-          with:
-            days: "tools.days"
-          outputParameters:
-            - type: object
-              mapping: "$."
+  - type: rest
+    port: 8080
+    namespace: ssl-tls-cert-lifecycle-api
+    description: Unified REST API for SSL/TLS certificate lifecycle management.
+    resources:
+    - path: /v1/certificates
+      name: certificates
+      description: Certificate management
+      operations:
+      - method: GET
+        name: list-certificates
+        description: List certificates with optional status and domain filtering
+        call: ssl-tls-cert-mgmt.list-certificates
+        with:
+          status: rest.status
+          domain: rest.domain
+          expiringBefore: rest.expiringBefore
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: request-certificate
+        description: Request a new SSL/TLS certificate for domain validation
+        call: ssl-tls-cert-mgmt.request-certificate
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/certificates/{certificateId}
+      name: certificate-detail
+      description: Certificate details
+      operations:
+      - method: GET
+        name: get-certificate
+        description: Get certificate details and PEM data
+        call: ssl-tls-cert-mgmt.get-certificate
+        with:
+          certificateId: rest.certificateId
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/certificates/{certificateId}/download
+      name: certificate-download
+      description: Download certificate
+      operations:
+      - method: GET
+        name: download-certificate
+        description: Download certificate in PEM or PKCS12 format
+        call: ssl-tls-cert-mgmt.download-certificate
+        with:
+          certificateId: rest.certificateId
+          format: rest.format
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/certificates/{certificateId}/renew
+      name: certificate-renew
+      description: Certificate renewal
+      operations:
+      - method: POST
+        name: renew-certificate
+        description: Initiate certificate renewal
+        call: ssl-tls-cert-mgmt.renew-certificate
+        with:
+          certificateId: rest.certificateId
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/certificates/{certificateId}/revoke
+      name: certificate-revoke
+      description: Certificate revocation
+      operations:
+      - method: POST
+        name: revoke-certificate
+        description: Revoke a certificate with reason code
+        call: ssl-tls-cert-mgmt.revoke-certificate
+        with:
+          certificateId: rest.certificateId
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/orders
+      name: orders
+      description: Certificate orders
+      operations:
+      - method: GET
+        name: list-orders
+        description: List certificate orders
+        call: ssl-tls-cert-mgmt.list-orders
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/orders/{orderId}
+      name: order-detail
+      description: Order details and challenges
+      operations:
+      - method: GET
+        name: get-order
+        description: Get order details with challenge status
+        call: ssl-tls-cert-mgmt.get-order
+        with:
+          orderId: rest.orderId
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/domains
+      name: domains
+      description: Domain validation status
+      operations:
+      - method: GET
+        name: list-domains
+        description: List domains and validation status
+        call: ssl-tls-cert-mgmt.list-domains
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/monitoring/expiring
+      name: expiring-certificates
+      description: Expiry monitoring
+      operations:
+      - method: GET
+        name: get-expiring-certificates
+        description: Get certificates expiring within N days
+        call: ssl-tls-cert-mgmt.get-expiring-certificates
+        with:
+          days: rest.days
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    port: 9090
+    namespace: ssl-tls-cert-lifecycle-mcp
+    transport: http
+    description: MCP server for AI-assisted SSL/TLS certificate lifecycle management.
+    tools:
+    - name: list-certificates
+      description: List SSL/TLS certificates with optional status, domain, and expiry filtering
+      hints:
+        readOnly: true
+        idempotent: true
+      call: ssl-tls-cert-mgmt.list-certificates
+      with:
+        status: tools.status
+        domain: tools.domain
+        expiringBefore: tools.expiringBefore
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: get-certificate
+      description: Get SSL/TLS certificate details including PEM, chain, and metadata
+      hints:
+        readOnly: true
+        idempotent: true
+      call: ssl-tls-cert-mgmt.get-certificate
+      with:
+        certificateId: tools.certificateId
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: request-certificate
+      description: Request a new SSL/TLS certificate for one or more domains
+      hints:
+        readOnly: false
+        idempotent: false
+      call: ssl-tls-cert-mgmt.request-certificate
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: download-certificate
+      description: Download SSL/TLS certificate in PEM or PKCS12 format
+      hints:
+        readOnly: true
+        idempotent: true
+      call: ssl-tls-cert-mgmt.download-certificate
+      with:
+        certificateId: tools.certificateId
+        format: tools.format
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: renew-certificate
+      description: Initiate renewal for an existing SSL/TLS certificate
+      hints:
+        readOnly: false
+        idempotent: false
+      call: ssl-tls-cert-mgmt.renew-certificate
+      with:
+        certificateId: tools.certificateId
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: revoke-certificate
+      description: Revoke an SSL/TLS certificate with a reason code
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: ssl-tls-cert-mgmt.revoke-certificate
+      with:
+        certificateId: tools.certificateId
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: get-order
+      description: Get certificate order status including domain validation challenges
+      hints:
+        readOnly: true
+        idempotent: true
+      call: ssl-tls-cert-mgmt.get-order
+      with:
+        orderId: tools.orderId
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: list-domains
+      description: List domains and their certificate validation status
+      hints:
+        readOnly: true
+        idempotent: true
+      call: ssl-tls-cert-mgmt.list-domains
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: get-expiring-certificates
+      description: Get SSL/TLS certificates expiring within the next N days for proactive renewal
+      hints:
+        readOnly: true
+        idempotent: true
+      call: ssl-tls-cert-mgmt.get-expiring-certificates
+      with:
+        days: tools.days
+      outputParameters:
+      - type: object
+        mapping: $.
