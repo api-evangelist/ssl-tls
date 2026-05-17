@@ -82,7 +82,7 @@ common:
     url: https://letsencrypt.org/
   - type: Documentation
     url: https://letsencrypt.org/docs/
-  - type: GitHub Organization
+  - type: GitHubOrganization
     url: https://github.com/letsencrypt
   - type: OpenAPI
     url: >-
