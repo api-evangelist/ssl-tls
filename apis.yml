@@ -6,7 +6,7 @@ description: >-
   HTTPS, email, VoIP, and other protocols. This covers certificate management, public key infrastructure (PKI),
   certificate authorities, and TLS configuration APIs from major vendors and open source projects.
 type: Index
-image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
 tags:
   - SSL/TLS
   - TLS
