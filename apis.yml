@@ -70,6 +70,12 @@ apis:
       - type: Documentation
         url: https://sectigo.com/knowledge-base
 common:
+  - type: VulnerabilityDisclosure
+    url: security/ssl-tls-vulnerability-disclosure.yml
+  - type: DomainSecurity
+    url: security/ssl-tls-domain-security.yml
+  - type: Authentication
+    url: authentication/ssl-tls-authentication.yml
   - type: Website
     url: https://letsencrypt.org/
   - type: Documentation
@@ -91,6 +97,8 @@ common:
     url: https://raw.githubusercontent.com/api-evangelist/ssl-tls/refs/heads/main/rules/ssl-tls-rules.yml
   - type: Vocabulary
     url: https://raw.githubusercontent.com/api-evangelist/ssl-tls/refs/heads/main/vocabulary/ssl-tls-vocabulary.yml
+  - url: https://letsencrypt.org/feed.xml
+    type: Blog
 maintainers:
   - FN: Kin Lane
     email: kin@apievangelist.com
