@@ -1,0 +1,143 @@
+openapi: 3.1.0
+info:
+  title: SSL/TLS Certificate Management Certificates Orders API
+  description: A REST API for SSL/TLS certificate lifecycle management including issuance, renewal, revocation, and monitoring. Represents common certificate management capabilities available across major CAs and PKI platforms including Let's Encrypt ACME, DigiCert, Sectigo, and enterprise PKI systems.
+  version: '1.0'
+  contact:
+    name: Let's Encrypt
+    url: https://letsencrypt.org/
+  license:
+    name: Mozilla Public License 2.0
+    url: https://mozilla.org/MPL/2.0/
+servers:
+- url: https://api.certmanager.example.com/v1
+  description: Certificate Management API
+security:
+- ApiKeyAuth: []
+tags:
+- name: Orders
+  description: Certificate order lifecycle
+paths:
+  /orders:
+    get:
+      operationId: listOrders
+      summary: List Orders
+      description: Returns a list of certificate orders with their current status and validation state.
+      tags:
+      - Orders
+      parameters:
+      - name: status
+        in: query
+        schema:
+          type: string
+          enum:
+          - pending
+          - processing
+          - valid
+          - invalid
+          - expired
+      - name: page
+        in: query
+        schema:
+          type: integer
+          default: 1
+      responses:
+        '200':
+          description: Order list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderListResponse'
+  /orders/{orderId}:
+    get:
+      operationId: getOrder
+      summary: Get Order
+      description: Returns the current status of a certificate order including challenge status.
+      tags:
+      - Orders
+      parameters:
+      - name: orderId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Order details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CertificateOrder'
+components:
+  schemas:
+    CertificateOrder:
+      type: object
+      properties:
+        id:
+          type: string
+        status:
+          type: string
+          enum:
+          - pending
+          - processing
+          - valid
+          - invalid
+          - expired
+        domains:
+          type: array
+          items:
+            type: string
+        challenges:
+          type: array
+          items:
+            $ref: '#/components/schemas/Challenge'
+        certificateId:
+          type: string
+          nullable: true
+          description: Set when status is valid
+        expiresAt:
+          type: string
+          format: date-time
+        createdAt:
+          type: string
+          format: date-time
+    OrderListResponse:
+      type: object
+      properties:
+        orders:
+          type: array
+          items:
+            $ref: '#/components/schemas/CertificateOrder'
+        total:
+          type: integer
+    Challenge:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+          enum:
+          - http-01
+          - dns-01
+          - tls-alpn-01
+        domain:
+          type: string
+        status:
+          type: string
+          enum:
+          - pending
+          - processing
+          - valid
+          - invalid
+        token:
+          type: string
+          description: Challenge token to deploy
+        validationRecord:
+          type: object
+          description: Expected record (URL for http-01, DNS record for dns-01)
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key

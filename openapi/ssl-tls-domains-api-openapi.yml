@@ -1,0 +1,122 @@
+openapi: 3.1.0
+info:
+  title: SSL/TLS Certificate Management Certificates Domains API
+  description: A REST API for SSL/TLS certificate lifecycle management including issuance, renewal, revocation, and monitoring. Represents common certificate management capabilities available across major CAs and PKI platforms including Let's Encrypt ACME, DigiCert, Sectigo, and enterprise PKI systems.
+  version: '1.0'
+  contact:
+    name: Let's Encrypt
+    url: https://letsencrypt.org/
+  license:
+    name: Mozilla Public License 2.0
+    url: https://mozilla.org/MPL/2.0/
+servers:
+- url: https://api.certmanager.example.com/v1
+  description: Certificate Management API
+security:
+- ApiKeyAuth: []
+tags:
+- name: Domains
+  description: Domain verification and management
+paths:
+  /orders/{orderId}/challenges/{challengeId}/verify:
+    post:
+      operationId: verifyChallenge
+      summary: Verify Domain Challenge
+      description: Notifies the CA to verify a completed domain ownership challenge. The CA will check for the expected token at the challenge URL or DNS record. Once verified, the order can proceed to certificate issuance.
+      tags:
+      - Domains
+      parameters:
+      - name: orderId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: challengeId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Verification triggered
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Challenge'
+  /domains:
+    get:
+      operationId: listDomains
+      summary: List Domains
+      description: Returns all domains registered in the account with their validation status.
+      tags:
+      - Domains
+      responses:
+        '200':
+          description: Domain list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DomainListResponse'
+components:
+  schemas:
+    Domain:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        validationStatus:
+          type: string
+          enum:
+          - unverified
+          - pending
+          - verified
+          - failed
+        validationMethod:
+          type: string
+          enum:
+          - http-01
+          - dns-01
+          - tls-alpn-01
+          - email
+    Challenge:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+          enum:
+          - http-01
+          - dns-01
+          - tls-alpn-01
+        domain:
+          type: string
+        status:
+          type: string
+          enum:
+          - pending
+          - processing
+          - valid
+          - invalid
+        token:
+          type: string
+          description: Challenge token to deploy
+        validationRecord:
+          type: object
+          description: Expected record (URL for http-01, DNS record for dns-01)
+    DomainListResponse:
+      type: object
+      properties:
+        domains:
+          type: array
+          items:
+            $ref: '#/components/schemas/Domain'
+        total:
+          type: integer
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key

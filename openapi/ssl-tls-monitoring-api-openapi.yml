@@ -1,0 +1,138 @@
+openapi: 3.1.0
+info:
+  title: SSL/TLS Certificate Management Certificates Monitoring API
+  description: A REST API for SSL/TLS certificate lifecycle management including issuance, renewal, revocation, and monitoring. Represents common certificate management capabilities available across major CAs and PKI platforms including Let's Encrypt ACME, DigiCert, Sectigo, and enterprise PKI systems.
+  version: '1.0'
+  contact:
+    name: Let's Encrypt
+    url: https://letsencrypt.org/
+  license:
+    name: Mozilla Public License 2.0
+    url: https://mozilla.org/MPL/2.0/
+servers:
+- url: https://api.certmanager.example.com/v1
+  description: Certificate Management API
+security:
+- ApiKeyAuth: []
+tags:
+- name: Monitoring
+  description: Certificate expiry monitoring
+paths:
+  /monitoring/expiring:
+    get:
+      operationId: getExpiringCertificates
+      summary: Get Expiring Certificates
+      description: Returns certificates expiring within the specified number of days. Use this for automated renewal workflows and alerting.
+      tags:
+      - Monitoring
+      parameters:
+      - name: days
+        in: query
+        description: Number of days to look ahead for expiring certificates
+        schema:
+          type: integer
+          default: 30
+          minimum: 1
+          maximum: 90
+      responses:
+        '200':
+          description: Expiring certificates
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CertificateListResponse'
+components:
+  schemas:
+    Certificate:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique certificate identifier
+        commonName:
+          type: string
+          description: Certificate common name (primary domain)
+        subjectAlternativeNames:
+          type: array
+          items:
+            type: string
+          description: All SANs in the certificate
+        serialNumber:
+          type: string
+          description: Certificate serial number (hex)
+        issuer:
+          type: string
+          description: Certificate issuer distinguished name
+        subject:
+          type: string
+          description: Certificate subject distinguished name
+        notBefore:
+          type: string
+          format: date-time
+          description: Certificate validity start
+        notAfter:
+          type: string
+          format: date-time
+          description: Certificate expiry
+        status:
+          type: string
+          enum:
+          - issued
+          - pending
+          - revoked
+          - expired
+        certType:
+          type: string
+          enum:
+          - DV
+          - OV
+          - EV
+          - wildcard
+          - multi-domain
+          - private
+        pem:
+          type: string
+          description: PEM-encoded certificate
+        chain:
+          type: string
+          description: PEM-encoded intermediate chain
+        keyAlgorithm:
+          type: string
+          enum:
+          - RSA-2048
+          - RSA-4096
+          - EC-256
+          - EC-384
+        fingerprint:
+          type: object
+          properties:
+            sha256:
+              type: string
+            sha1:
+              type: string
+        createdAt:
+          type: string
+          format: date-time
+        revokedAt:
+          type: string
+          format: date-time
+          nullable: true
+        revocationReason:
+          type: string
+          nullable: true
+    CertificateListResponse:
+      type: object
+      properties:
+        certificates:
+          type: array
+          items:
+            $ref: '#/components/schemas/Certificate'
+        total:
+          type: integer
+        page:
+          type: integer
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
