@@ -1,0 +1,22 @@
+{
+  "provider": "ssl-tls",
+  "sources": [
+    "ssl-tls-certificates-api-openapi.yml",
+    "ssl-tls-domains-api-openapi.yml",
+    "ssl-tls-monitoring-api-openapi.yml",
+    "ssl-tls-orders-api-openapi.yml",
+    "ssl-tls-revocation-api-openapi.yml"
+  ],
+  "outputs": [
+    "ssl-tls-certificates-api-openapi.yml",
+    "ssl-tls-domains-api-openapi.yml",
+    "ssl-tls-monitoring-api-openapi.yml",
+    "ssl-tls-orders-api-openapi.yml",
+    "ssl-tls-revocation-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}
