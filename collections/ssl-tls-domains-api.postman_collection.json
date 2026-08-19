@@ -1,0 +1,243 @@
+{
+  "item": [
+    {
+      "id": "278d3015-b334-4a6f-bc2a-badd8bfe213a",
+      "name": "Domains",
+      "description": {
+        "content": "Domain verification and management",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "a02f1d95-93ea-4776-ac5a-7f85e4315d07",
+          "name": "Verify Domain Challenge",
+          "request": {
+            "name": "Verify Domain Challenge",
+            "description": {
+              "content": "Notifies the CA to verify a completed domain ownership challenge. The CA will check for the expected token at the challenge URL or DNS record. Once verified, the order can proceed to certificate issuance.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "orders",
+                ":orderId",
+                "challenges",
+                ":challengeId",
+                "verify"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "orderId",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "challengeId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "79dcdfd0-bc87-456a-b5c7-9da95cfeaded",
+              "name": "Verification triggered",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orders",
+                    ":orderId",
+                    "challenges",
+                    ":challengeId",
+                    "verify"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orderId",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "challengeId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"string\",\n  \"type\": \"http-01\",\n  \"domain\": \"string\",\n  \"status\": \"processing\",\n  \"token\": \"string\",\n  \"validationRecord\": {}\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "aae40936-3865-4384-8f52-14f7e49fc4ce",
+          "name": "List Domains",
+          "request": {
+            "name": "List Domains",
+            "description": {
+              "content": "Returns all domains registered in the account with their validation status.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "domains"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "d3563219-136b-4f56-892b-53ef57e38b36",
+              "name": "Domain list",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "domains"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"domains\": [\n    {\n      \"id\": \"string\",\n      \"name\": \"string\",\n      \"validationStatus\": \"verified\",\n      \"validationMethod\": \"dns-01\"\n    },\n    {\n      \"id\": \"string\",\n      \"name\": \"string\",\n      \"validationStatus\": \"pending\",\n      \"validationMethod\": \"dns-01\"\n    }\n  ],\n  \"total\": 7898\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.certmanager.example.com/v1",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "X-API-Key"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "ff45dc4c-a63d-4e65-a9df-d35f7ce54dcf",
+    "name": "SSL/TLS Certificate Management Certificates Domains API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "A REST API for SSL/TLS certificate lifecycle management including issuance, renewal, revocation, and monitoring. Represents common certificate management capabilities available across major CAs and PKI platforms including Let's Encrypt ACME, DigiCert, Sectigo, and enterprise PKI systems.\n\nContact Support:\n Name: Let's Encrypt",
+      "type": "text/plain"
+    }
+  }
+}

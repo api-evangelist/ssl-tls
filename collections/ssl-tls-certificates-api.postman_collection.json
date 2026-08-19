@@ -1,0 +1,767 @@
+{
+  "item": [
+    {
+      "id": "568af167-b50d-406c-928b-83f6e7a96092",
+      "name": "Certificates",
+      "description": {
+        "content": "Certificate issuance and management",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "3f60c4e8-de76-42dd-aaad-38f3fb0880df",
+          "name": "List Certificates",
+          "request": {
+            "name": "List Certificates",
+            "description": {
+              "content": "Returns a paginated list of SSL/TLS certificates in the account, including their status, expiry dates, and associated domains.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "certificates"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "status",
+                  "value": "<string>",
+                  "description": "Filter by certificate status"
+                },
+                {
+                  "disabled": false,
+                  "key": "domain",
+                  "value": "<string>",
+                  "description": "Filter by domain name"
+                },
+                {
+                  "disabled": false,
+                  "key": "expiringBefore",
+                  "value": "<date>",
+                  "description": "Filter certificates expiring before this date (ISO 8601)"
+                },
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "50"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "a1dcd301-695d-4cd4-8f00-a9127cccb1c5",
+              "name": "Certificate list",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "certificates"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "status",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "domain",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "expiringBefore",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "50"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"certificates\": [\n    {\n      \"id\": \"string\",\n      \"commonName\": \"string\",\n      \"subjectAlternativeNames\": [\n        \"string\",\n        \"string\"\n      ],\n      \"serialNumber\": \"string\",\n      \"issuer\": \"string\",\n      \"subject\": \"string\",\n      \"notBefore\": \"2014-06-20T00:15:59.239Z\",\n      \"notAfter\": \"1969-11-04T20:36:30.546Z\",\n      \"status\": \"pending\",\n      \"certType\": \"OV\",\n      \"pem\": \"string\",\n      \"chain\": \"string\",\n      \"keyAlgorithm\": \"EC-256\",\n      \"fingerprint\": {\n        \"sha256\": \"string\",\n        \"sha1\": \"string\"\n      },\n      \"createdAt\": \"1999-01-14T11:13:50.288Z\",\n      \"revokedAt\": \"1980-05-23T09:37:05.737Z\",\n      \"revocationReason\": \"string\"\n    },\n    {\n      \"id\": \"string\",\n      \"commonName\": \"string\",\n      \"subjectAlternativeNames\": [\n        \"string\",\n        \"string\"\n      ],\n      \"serialNumber\": \"string\",\n      \"issuer\": \"string\",\n      \"subject\": \"string\",\n      \"notBefore\": \"2019-01-13T14:45:04.127Z\",\n      \"notAfter\": \"1987-02-27T10:37:43.665Z\",\n      \"status\": \"pending\",\n      \"certType\": \"multi-domain\",\n      \"pem\": \"string\",\n      \"chain\": \"string\",\n      \"keyAlgorithm\": \"EC-256\",\n      \"fingerprint\": {\n        \"sha256\": \"string\",\n        \"sha1\": \"string\"\n      },\n      \"createdAt\": \"1972-07-01T03:18:50.759Z\",\n      \"revokedAt\": \"2000-10-08T12:17:57.418Z\",\n      \"revocationReason\": \"string\"\n    }\n  ],\n  \"total\": 1292,\n  \"page\": 1348\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f0ef49b2-7b90-494d-bb61-4e955d404e62",
+              "name": "Authentication required",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "certificates"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "status",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "domain",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "expiringBefore",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "50"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"string\",\n  \"message\": \"string\",\n  \"details\": [\n    \"string\",\n    \"string\"\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "df9d129e-b1fb-4339-acf4-0ca9b56093c8",
+          "name": "Request Certificate",
+          "request": {
+            "name": "Request Certificate",
+            "description": {
+              "content": "Initiates a certificate issuance request for one or more domain names. Returns an order object with challenge details for domain validation.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "certificates"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"domains\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"certType\": \"DV\",\n  \"keyAlgorithm\": \"EC-256\",\n  \"validityDays\": 90,\n  \"challengeType\": \"http-01\",\n  \"csr\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "a71d3e0a-c5a5-481d-850b-7b49feb6726a",
+              "name": "Certificate request created",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "certificates"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"domains\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"certType\": \"DV\",\n  \"keyAlgorithm\": \"EC-256\",\n  \"validityDays\": 90,\n  \"challengeType\": \"http-01\",\n  \"csr\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"string\",\n  \"status\": \"expired\",\n  \"domains\": [\n    \"string\",\n    \"string\"\n  ],\n  \"challenges\": [\n    {\n      \"id\": \"string\",\n      \"type\": \"tls-alpn-01\",\n      \"domain\": \"string\",\n      \"status\": \"invalid\",\n      \"token\": \"string\",\n      \"validationRecord\": {}\n    },\n    {\n      \"id\": \"string\",\n      \"type\": \"tls-alpn-01\",\n      \"domain\": \"string\",\n      \"status\": \"invalid\",\n      \"token\": \"string\",\n      \"validationRecord\": {}\n    }\n  ],\n  \"certificateId\": \"string\",\n  \"expiresAt\": \"1952-04-29T22:59:01.037Z\",\n  \"createdAt\": \"2008-12-29T23:04:14.492Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c809a503-6380-43e6-9f3d-e9a378ed01a2",
+              "name": "Invalid request data",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "certificates"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"domains\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"certType\": \"DV\",\n  \"keyAlgorithm\": \"EC-256\",\n  \"validityDays\": 90,\n  \"challengeType\": \"http-01\",\n  \"csr\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"string\",\n  \"message\": \"string\",\n  \"details\": [\n    \"string\",\n    \"string\"\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "dad65d4f-d380-47a7-8668-cd66c0b20c5c",
+          "name": "Get Certificate",
+          "request": {
+            "name": "Get Certificate",
+            "description": {
+              "content": "Returns full details for a specific certificate including PEM data and metadata.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "certificates",
+                ":certificateId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "certificateId",
+                  "description": "(Required) Certificate identifier"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "203db46d-5d81-417a-bc40-e4674d9129fe",
+              "name": "Certificate details",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "certificates",
+                    ":certificateId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "certificateId",
+                      "description": "(Required) Certificate identifier"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"string\",\n  \"commonName\": \"string\",\n  \"subjectAlternativeNames\": [\n    \"string\",\n    \"string\"\n  ],\n  \"serialNumber\": \"string\",\n  \"issuer\": \"string\",\n  \"subject\": \"string\",\n  \"notBefore\": \"2002-08-13T10:50:05.913Z\",\n  \"notAfter\": \"1952-01-24T21:46:36.087Z\",\n  \"status\": \"revoked\",\n  \"certType\": \"EV\",\n  \"pem\": \"string\",\n  \"chain\": \"string\",\n  \"keyAlgorithm\": \"EC-384\",\n  \"fingerprint\": {\n    \"sha256\": \"string\",\n    \"sha1\": \"string\"\n  },\n  \"createdAt\": \"1959-05-05T08:34:34.784Z\",\n  \"revokedAt\": \"1996-02-17T09:13:41.144Z\",\n  \"revocationReason\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6a83dc18-f8b7-4332-a877-e60198a12712",
+              "name": "Resource not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "certificates",
+                    ":certificateId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "certificateId",
+                      "description": "(Required) Certificate identifier"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"string\",\n  \"message\": \"string\",\n  \"details\": [\n    \"string\",\n    \"string\"\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "22a221b0-7a47-4b3b-a111-897e95d056b6",
+          "name": "Download Certificate",
+          "request": {
+            "name": "Download Certificate",
+            "description": {
+              "content": "Downloads the certificate and certificate chain in PEM format. Returns the end-entity certificate and full chain for installation.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "certificates",
+                ":certificateId",
+                "download"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "format",
+                  "value": "pem"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "certificateId",
+                  "description": "(Required) Certificate identifier"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/x-pem-file"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "825a5ef0-5346-4f11-a72b-50e2d0c09ca1",
+              "name": "Certificate file",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "certificates",
+                    ":certificateId",
+                    "download"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "format",
+                      "value": "pem"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "certificateId",
+                      "description": "(Required) Certificate identifier"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/x-pem-file"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/x-pem-file"
+                }
+              ],
+              "body": "string",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "2d7d4708-6fa2-4afb-b1e3-ae5378ebdb5c",
+          "name": "Renew Certificate",
+          "request": {
+            "name": "Renew Certificate",
+            "description": {
+              "content": "Initiates certificate renewal for an existing certificate. Uses the same domain list and key unless overridden. Returns a new order object.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "certificates",
+                ":certificateId",
+                "renew"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "certificateId",
+                  "description": "(Required) Certificate identifier"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"reuseKey\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "3f2dfc85-b5e7-4733-9599-c4b63a465e68",
+              "name": "Renewal order created",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "certificates",
+                    ":certificateId",
+                    "renew"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "certificateId",
+                      "description": "(Required) Certificate identifier"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"reuseKey\": true\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"string\",\n  \"status\": \"expired\",\n  \"domains\": [\n    \"string\",\n    \"string\"\n  ],\n  \"challenges\": [\n    {\n      \"id\": \"string\",\n      \"type\": \"tls-alpn-01\",\n      \"domain\": \"string\",\n      \"status\": \"invalid\",\n      \"token\": \"string\",\n      \"validationRecord\": {}\n    },\n    {\n      \"id\": \"string\",\n      \"type\": \"tls-alpn-01\",\n      \"domain\": \"string\",\n      \"status\": \"invalid\",\n      \"token\": \"string\",\n      \"validationRecord\": {}\n    }\n  ],\n  \"certificateId\": \"string\",\n  \"expiresAt\": \"1952-04-29T22:59:01.037Z\",\n  \"createdAt\": \"2008-12-29T23:04:14.492Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.certmanager.example.com/v1",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "X-API-Key"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "cc3a3e2c-a49b-4f37-96ce-d7ab1f644d5b",
+    "name": "SSL/TLS Certificate Management Certificates API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "A REST API for SSL/TLS certificate lifecycle management including issuance, renewal, revocation, and monitoring. Represents common certificate management capabilities available across major CAs and PKI platforms including Let's Encrypt ACME, DigiCert, Sectigo, and enterprise PKI systems.\n\nContact Support:\n Name: Let's Encrypt",
+      "type": "text/plain"
+    }
+  }
+}

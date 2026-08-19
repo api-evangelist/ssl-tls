@@ -1,0 +1,49 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "SSL/TLS Certificate Management Certificates Revocation API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "X-API-Key",
+      "value": "{{X-API-Key}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Revocation",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Revoke Certificate",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.certmanager.example.com/v1/certificates/:certificateId/revoke",
+            "params": [
+              {
+                "name": "certificateId",
+                "value": "",
+                "type": "path",
+                "description": "Certificate identifier"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Revokes a certificate, making it immediately invalid. Revoked certificates appear in the CA's CRL and OCSP responses. Provide a reason code."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

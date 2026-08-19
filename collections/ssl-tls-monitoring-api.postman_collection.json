@@ -1,0 +1,141 @@
+{
+  "item": [
+    {
+      "id": "fdc49c6f-5c79-45f8-a322-f5d75804a48d",
+      "name": "Monitoring",
+      "description": {
+        "content": "Certificate expiry monitoring",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "d5328379-be0c-4c2f-84dc-1869bbd4caf7",
+          "name": "Get Expiring Certificates",
+          "request": {
+            "name": "Get Expiring Certificates",
+            "description": {
+              "content": "Returns certificates expiring within the specified number of days. Use this for automated renewal workflows and alerting.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "monitoring",
+                "expiring"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "days",
+                  "value": "30",
+                  "description": "Number of days to look ahead for expiring certificates"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "ae560bde-0d06-4de9-ab7e-6b65465a5727",
+              "name": "Expiring certificates",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "monitoring",
+                    "expiring"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "days",
+                      "value": "30"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"certificates\": [\n    {\n      \"id\": \"string\",\n      \"commonName\": \"string\",\n      \"subjectAlternativeNames\": [\n        \"string\",\n        \"string\"\n      ],\n      \"serialNumber\": \"string\",\n      \"issuer\": \"string\",\n      \"subject\": \"string\",\n      \"notBefore\": \"1969-08-28T13:16:53.368Z\",\n      \"notAfter\": \"2004-01-20T09:38:45.990Z\",\n      \"status\": \"issued\",\n      \"certType\": \"OV\",\n      \"pem\": \"string\",\n      \"chain\": \"string\",\n      \"keyAlgorithm\": \"RSA-2048\",\n      \"fingerprint\": {\n        \"sha256\": \"string\",\n        \"sha1\": \"string\"\n      },\n      \"createdAt\": \"2007-09-13T02:36:30.745Z\",\n      \"revokedAt\": \"1963-05-30T20:57:17.917Z\",\n      \"revocationReason\": \"string\"\n    },\n    {\n      \"id\": \"string\",\n      \"commonName\": \"string\",\n      \"subjectAlternativeNames\": [\n        \"string\",\n        \"string\"\n      ],\n      \"serialNumber\": \"string\",\n      \"issuer\": \"string\",\n      \"subject\": \"string\",\n      \"notBefore\": \"1993-08-29T16:03:33.833Z\",\n      \"notAfter\": \"1981-08-05T20:26:26.898Z\",\n      \"status\": \"issued\",\n      \"certType\": \"OV\",\n      \"pem\": \"string\",\n      \"chain\": \"string\",\n      \"keyAlgorithm\": \"EC-384\",\n      \"fingerprint\": {\n        \"sha256\": \"string\",\n        \"sha1\": \"string\"\n      },\n      \"createdAt\": \"1982-10-08T20:56:48.180Z\",\n      \"revokedAt\": \"1984-08-17T16:27:33.760Z\",\n      \"revocationReason\": \"string\"\n    }\n  ],\n  \"total\": 1796,\n  \"page\": 6056\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.certmanager.example.com/v1",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "X-API-Key"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "2bfb8719-f959-4ac5-9468-d8465a5ab3fa",
+    "name": "SSL/TLS Certificate Management Certificates Monitoring API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "A REST API for SSL/TLS certificate lifecycle management including issuance, renewal, revocation, and monitoring. Represents common certificate management capabilities available across major CAs and PKI platforms including Let's Encrypt ACME, DigiCert, Sectigo, and enterprise PKI systems.\n\nContact Support:\n Name: Let's Encrypt",
+      "type": "text/plain"
+    }
+  }
+}

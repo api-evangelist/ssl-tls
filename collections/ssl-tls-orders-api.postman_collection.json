@@ -1,0 +1,243 @@
+{
+  "item": [
+    {
+      "id": "5533b162-c848-4453-ab3a-5d7d2ba66bd7",
+      "name": "Orders",
+      "description": {
+        "content": "Certificate order lifecycle",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "99576c53-d724-4a5e-b169-496693b32916",
+          "name": "List Orders",
+          "request": {
+            "name": "List Orders",
+            "description": {
+              "content": "Returns a list of certificate orders with their current status and validation state.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "orders"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "status",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "1"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "76af378d-0d8c-4439-b952-534cda013f81",
+              "name": "Order list",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orders"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "status",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "page",
+                      "value": "1"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"orders\": [\n    {\n      \"id\": \"string\",\n      \"status\": \"invalid\",\n      \"domains\": [\n        \"string\",\n        \"string\"\n      ],\n      \"challenges\": [\n        {\n          \"id\": \"string\",\n          \"type\": \"tls-alpn-01\",\n          \"domain\": \"string\",\n          \"status\": \"invalid\",\n          \"token\": \"string\",\n          \"validationRecord\": {}\n        },\n        {\n          \"id\": \"string\",\n          \"type\": \"dns-01\",\n          \"domain\": \"string\",\n          \"status\": \"processing\",\n          \"token\": \"string\",\n          \"validationRecord\": {}\n        }\n      ],\n      \"certificateId\": \"string\",\n      \"expiresAt\": \"1990-06-29T22:26:44.859Z\",\n      \"createdAt\": \"1978-01-22T21:23:26.207Z\"\n    },\n    {\n      \"id\": \"string\",\n      \"status\": \"processing\",\n      \"domains\": [\n        \"string\",\n        \"string\"\n      ],\n      \"challenges\": [\n        {\n          \"id\": \"string\",\n          \"type\": \"tls-alpn-01\",\n          \"domain\": \"string\",\n          \"status\": \"pending\",\n          \"token\": \"string\",\n          \"validationRecord\": {}\n        },\n        {\n          \"id\": \"string\",\n          \"type\": \"tls-alpn-01\",\n          \"domain\": \"string\",\n          \"status\": \"pending\",\n          \"token\": \"string\",\n          \"validationRecord\": {}\n        }\n      ],\n      \"certificateId\": \"string\",\n      \"expiresAt\": \"1977-10-27T13:38:22.951Z\",\n      \"createdAt\": \"1956-01-08T23:52:37.463Z\"\n    }\n  ],\n  \"total\": 8057\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "947e085a-b290-4935-8af0-e80dae8f20b8",
+          "name": "Get Order",
+          "request": {
+            "name": "Get Order",
+            "description": {
+              "content": "Returns the current status of a certificate order including challenge status.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "orders",
+                ":orderId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "orderId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "b713e3e9-682e-4868-acf7-daab5f206e69",
+              "name": "Order details",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orders",
+                    ":orderId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "orderId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"string\",\n  \"status\": \"expired\",\n  \"domains\": [\n    \"string\",\n    \"string\"\n  ],\n  \"challenges\": [\n    {\n      \"id\": \"string\",\n      \"type\": \"dns-01\",\n      \"domain\": \"string\",\n      \"status\": \"pending\",\n      \"token\": \"string\",\n      \"validationRecord\": {}\n    },\n    {\n      \"id\": \"string\",\n      \"type\": \"dns-01\",\n      \"domain\": \"string\",\n      \"status\": \"pending\",\n      \"token\": \"string\",\n      \"validationRecord\": {}\n    }\n  ],\n  \"certificateId\": \"string\",\n  \"expiresAt\": \"2002-03-19T12:13:25.489Z\",\n  \"createdAt\": \"1957-06-26T18:06:50.351Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.certmanager.example.com/v1",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "X-API-Key"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "82b14dff-2ab4-4778-9a5c-3559af5790c6",
+    "name": "SSL/TLS Certificate Management Certificates Orders API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "A REST API for SSL/TLS certificate lifecycle management including issuance, renewal, revocation, and monitoring. Represents common certificate management capabilities available across major CAs and PKI platforms including Let's Encrypt ACME, DigiCert, Sectigo, and enterprise PKI systems.\n\nContact Support:\n Name: Let's Encrypt",
+      "type": "text/plain"
+    }
+  }
+}

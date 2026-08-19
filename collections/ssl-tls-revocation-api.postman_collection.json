@@ -1,0 +1,168 @@
+{
+  "item": [
+    {
+      "id": "bd02230c-4fc8-41c9-b780-d9dfa1b55717",
+      "name": "Revocation",
+      "description": {
+        "content": "Certificate revocation",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "1225a7f4-b05c-4d35-94fa-0966c3b5d52e",
+          "name": "Revoke Certificate",
+          "request": {
+            "name": "Revoke Certificate",
+            "description": {
+              "content": "Revokes a certificate, making it immediately invalid. Revoked certificates appear in the CA's CRL and OCSP responses. Provide a reason code.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "certificates",
+                ":certificateId",
+                "revoke"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "certificateId",
+                  "description": "(Required) Certificate identifier"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"reason\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "017dc166-76e1-40d0-a0bd-761cca0a9336",
+              "name": "Certificate revoked",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "certificates",
+                    ":certificateId",
+                    "revoke"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "certificateId",
+                      "description": "(Required) Certificate identifier"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"reason\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"string\",\n  \"commonName\": \"string\",\n  \"subjectAlternativeNames\": [\n    \"string\",\n    \"string\"\n  ],\n  \"serialNumber\": \"string\",\n  \"issuer\": \"string\",\n  \"subject\": \"string\",\n  \"notBefore\": \"1949-10-22T20:40:20.628Z\",\n  \"notAfter\": \"1982-09-25T03:48:42.515Z\",\n  \"status\": \"pending\",\n  \"certType\": \"EV\",\n  \"pem\": \"string\",\n  \"chain\": \"string\",\n  \"keyAlgorithm\": \"RSA-2048\",\n  \"fingerprint\": {\n    \"sha256\": \"string\",\n    \"sha1\": \"string\"\n  },\n  \"createdAt\": \"1994-08-28T10:35:33.446Z\",\n  \"revokedAt\": \"1976-02-02T09:08:38.217Z\",\n  \"revocationReason\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.certmanager.example.com/v1",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "X-API-Key"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "d206b844-7659-45ff-b791-4f157bf3bbb9",
+    "name": "SSL/TLS Certificate Management Certificates Revocation API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "A REST API for SSL/TLS certificate lifecycle management including issuance, renewal, revocation, and monitoring. Represents common certificate management capabilities available across major CAs and PKI platforms including Let's Encrypt ACME, DigiCert, Sectigo, and enterprise PKI systems.\n\nContact Support:\n Name: Let's Encrypt",
+      "type": "text/plain"
+    }
+  }
+}

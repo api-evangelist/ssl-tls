@@ -1,0 +1,45 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "SSL/TLS Certificate Management Certificates Monitoring API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "X-API-Key",
+      "value": "{{X-API-Key}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Monitoring",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get Expiring Certificates",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.certmanager.example.com/v1/monitoring/expiring",
+            "params": [
+              {
+                "name": "days",
+                "value": "",
+                "type": "query",
+                "description": "Number of days to look ahead for expiring certificates"
+              }
+            ]
+          },
+          "docs": "Returns certificates expiring within the specified number of days. Use this for automated renewal workflows and alerting."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
