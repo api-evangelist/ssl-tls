@@ -31,7 +31,7 @@ tags:
 url: https://raw.githubusercontent.com/api-evangelist/ssl-tls/refs/heads/main/apis.yml
 created: '2025-01-01'
 modified: '2026-05-19'
-specificationVersion: '0.19'
+specificationVersion: '0.23'
 apis:
 - aid: ssl-tls:digicert-api
   name: DigiCert Certificate Management API
