@@ -105,6 +105,8 @@ apis:
   humanURL: https://letsencrypt.org/
   baseURL: https://acme-v02.api.letsencrypt.org/directory
   tags:
+  - Order
+  tags_raw:
   - Orders
   properties:
   - type: OpenAPI
