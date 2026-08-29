@@ -6,6 +6,17 @@ description: >-
   HTTPS, email, VoIP, and other protocols. This covers certificate management, public key infrastructure (PKI),
   certificate authorities, and TLS configuration APIs from major vendors and open source projects.
 type: Index
+deliveryModel:
+  model: unknown
+  open_source: false
+  commercial: false
+  callable_host: false
+  label: Delivery model not determined — needs a product licence on record
+  confidence: low
+  source:
+  - openapi
+  generated: '2026-08-28'
+  method: derived
 accessModel:
   pricing: enterprise
   onboarding: self-serve
