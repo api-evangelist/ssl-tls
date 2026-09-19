@@ -38,6 +38,14 @@ tags:
   - PKI
   - Cryptography
   - Certificate Authority
+  - HTTP
+tags_raw:
+  - SSL/TLS
+  - TLS
+  - Certificates
+  - PKI
+  - Cryptography
+  - Certificate Authority
   - HTTPS
 url: https://raw.githubusercontent.com/api-evangelist/ssl-tls/refs/heads/main/apis.yml
 created: '2025-01-01'
