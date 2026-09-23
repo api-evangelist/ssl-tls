@@ -1,11 +1,7 @@
 {
   "provider": "ssl-tls",
   "sources": [
-    "ssl-tls-certificates-api-openapi.yml",
-    "ssl-tls-domains-api-openapi.yml",
-    "ssl-tls-monitoring-api-openapi.yml",
-    "ssl-tls-orders-api-openapi.yml",
-    "ssl-tls-revocation-api-openapi.yml"
+    "_original/ssl-tls-certificate-management-openapi.yml"
   ],
   "outputs": [
     "ssl-tls-certificates-api-openapi.yml",
@@ -17,6 +13,16 @@
   "archived": [],
   "errors": [],
   "warnings": [],
-  "notes": [],
-  "skipped": []
+  "notes": [
+    "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "ssl-tls-certificate-management-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "apis.yml register: already-registered"
+  ],
+  "skipped": [
+    "ssl-tls-certificates-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "ssl-tls-domains-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "ssl-tls-monitoring-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "ssl-tls-orders-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "ssl-tls-revocation-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
 }

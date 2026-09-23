@@ -1,6 +1,6 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: SSL/TLS Certificate Management Certificates Monitoring API
+  title: SSL/TLS Certificate Management Monitoring API
   description: A REST API for SSL/TLS certificate lifecycle management including issuance, renewal, revocation, and monitoring. Represents common certificate management capabilities available across major CAs and PKI platforms including Let's Encrypt ACME, DigiCert, Sectigo, and enterprise PKI systems.
   version: '1.0'
   contact:
