@@ -192,32 +192,6 @@ components:
         createdAt:
           type: string
           format: date-time
-    Challenge:
-      type: object
-      properties:
-        id:
-          type: string
-        type:
-          type: string
-          enum:
-          - http-01
-          - dns-01
-          - tls-alpn-01
-        domain:
-          type: string
-        status:
-          type: string
-          enum:
-          - pending
-          - processing
-          - valid
-          - invalid
-        token:
-          type: string
-          description: Challenge token to deploy
-        validationRecord:
-          type: object
-          description: Expected record (URL for http-01, DNS record for dns-01)
     ErrorResponse:
       type: object
       properties:
@@ -229,17 +203,6 @@ components:
           type: array
           items:
             type: string
-    CertificateListResponse:
-      type: object
-      properties:
-        certificates:
-          type: array
-          items:
-            $ref: '#/components/schemas/Certificate'
-        total:
-          type: integer
-        page:
-          type: integer
     Certificate:
       type: object
       properties:
@@ -356,7 +319,50 @@ components:
         csr:
           type: string
           description: Optional CSR in PEM format (if key is managed client-side)
+    Challenge:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+          enum:
+          - http-01
+          - dns-01
+          - tls-alpn-01
+        domain:
+          type: string
+        status:
+          type: string
+          enum:
+          - pending
+          - processing
+          - valid
+          - invalid
+        token:
+          type: string
+          description: Challenge token to deploy
+        validationRecord:
+          type: object
+          description: Expected record (URL for http-01, DNS record for dns-01)
+    CertificateListResponse:
+      type: object
+      properties:
+        certificates:
+          type: array
+          items:
+            $ref: '#/components/schemas/Certificate'
+        total:
+          type: integer
+        page:
+          type: integer
   responses:
+    Unauthorized:
+      description: Authentication required
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
     NotFound:
       description: Resource not found
       content:
@@ -365,12 +371,6 @@ components:
             $ref: '#/components/schemas/ErrorResponse'
     BadRequest:
       description: Invalid request data
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-    Unauthorized:
-      description: Authentication required
       content:
         application/json:
           schema:

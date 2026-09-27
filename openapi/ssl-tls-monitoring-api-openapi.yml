@@ -43,6 +43,17 @@ paths:
                 $ref: '#/components/schemas/CertificateListResponse'
 components:
   schemas:
+    CertificateListResponse:
+      type: object
+      properties:
+        certificates:
+          type: array
+          items:
+            $ref: '#/components/schemas/Certificate'
+        total:
+          type: integer
+        page:
+          type: integer
     Certificate:
       type: object
       properties:
@@ -120,17 +131,6 @@ components:
         revocationReason:
           type: string
           nullable: true
-    CertificateListResponse:
-      type: object
-      properties:
-        certificates:
-          type: array
-          items:
-            $ref: '#/components/schemas/Certificate'
-        total:
-          type: integer
-        page:
-          type: integer
   securitySchemes:
     ApiKeyAuth:
       type: apiKey
