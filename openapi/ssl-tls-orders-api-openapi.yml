@@ -70,37 +70,6 @@ paths:
                 $ref: '#/components/schemas/CertificateOrder'
 components:
   schemas:
-    CertificateOrder:
-      type: object
-      properties:
-        id:
-          type: string
-        status:
-          type: string
-          enum:
-          - pending
-          - processing
-          - valid
-          - invalid
-          - expired
-        domains:
-          type: array
-          items:
-            type: string
-        challenges:
-          type: array
-          items:
-            $ref: '#/components/schemas/Challenge'
-        certificateId:
-          type: string
-          nullable: true
-          description: Set when status is valid
-        expiresAt:
-          type: string
-          format: date-time
-        createdAt:
-          type: string
-          format: date-time
     OrderListResponse:
       type: object
       properties:
@@ -136,6 +105,37 @@ components:
         validationRecord:
           type: object
           description: Expected record (URL for http-01, DNS record for dns-01)
+    CertificateOrder:
+      type: object
+      properties:
+        id:
+          type: string
+        status:
+          type: string
+          enum:
+          - pending
+          - processing
+          - valid
+          - invalid
+          - expired
+        domains:
+          type: array
+          items:
+            type: string
+        challenges:
+          type: array
+          items:
+            $ref: '#/components/schemas/Challenge'
+        certificateId:
+          type: string
+          nullable: true
+          description: Set when status is valid
+        expiresAt:
+          type: string
+          format: date-time
+        createdAt:
+          type: string
+          format: date-time
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

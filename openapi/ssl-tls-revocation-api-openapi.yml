@@ -41,6 +41,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/Certificate'
 components:
+  parameters:
+    CertificateId:
+      name: certificateId
+      in: path
+      required: true
+      description: Certificate identifier
+      schema:
+        type: string
   schemas:
     RevocationRequest:
       type: object
@@ -132,14 +140,6 @@ components:
         revocationReason:
           type: string
           nullable: true
-  parameters:
-    CertificateId:
-      name: certificateId
-      in: path
-      required: true
-      description: Certificate identifier
-      schema:
-        type: string
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

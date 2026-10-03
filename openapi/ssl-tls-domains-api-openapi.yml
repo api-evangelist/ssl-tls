@@ -59,6 +59,15 @@ paths:
                 $ref: '#/components/schemas/DomainListResponse'
 components:
   schemas:
+    DomainListResponse:
+      type: object
+      properties:
+        domains:
+          type: array
+          items:
+            $ref: '#/components/schemas/Domain'
+        total:
+          type: integer
     Challenge:
       type: object
       properties:
@@ -85,15 +94,6 @@ components:
         validationRecord:
           type: object
           description: Expected record (URL for http-01, DNS record for dns-01)
-    DomainListResponse:
-      type: object
-      properties:
-        domains:
-          type: array
-          items:
-            $ref: '#/components/schemas/Domain'
-        total:
-          type: integer
     Domain:
       type: object
       properties:

@@ -161,37 +161,6 @@ paths:
                 $ref: '#/components/schemas/CertificateOrder'
 components:
   schemas:
-    CertificateOrder:
-      type: object
-      properties:
-        id:
-          type: string
-        status:
-          type: string
-          enum:
-          - pending
-          - processing
-          - valid
-          - invalid
-          - expired
-        domains:
-          type: array
-          items:
-            type: string
-        challenges:
-          type: array
-          items:
-            $ref: '#/components/schemas/Challenge'
-        certificateId:
-          type: string
-          nullable: true
-          description: Set when status is valid
-        expiresAt:
-          type: string
-          format: date-time
-        createdAt:
-          type: string
-          format: date-time
     ErrorResponse:
       type: object
       properties:
@@ -280,6 +249,74 @@ components:
         revocationReason:
           type: string
           nullable: true
+    CertificateListResponse:
+      type: object
+      properties:
+        certificates:
+          type: array
+          items:
+            $ref: '#/components/schemas/Certificate'
+        total:
+          type: integer
+        page:
+          type: integer
+    Challenge:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+          enum:
+          - http-01
+          - dns-01
+          - tls-alpn-01
+        domain:
+          type: string
+        status:
+          type: string
+          enum:
+          - pending
+          - processing
+          - valid
+          - invalid
+        token:
+          type: string
+          description: Challenge token to deploy
+        validationRecord:
+          type: object
+          description: Expected record (URL for http-01, DNS record for dns-01)
+    CertificateOrder:
+      type: object
+      properties:
+        id:
+          type: string
+        status:
+          type: string
+          enum:
+          - pending
+          - processing
+          - valid
+          - invalid
+          - expired
+        domains:
+          type: array
+          items:
+            type: string
+        challenges:
+          type: array
+          items:
+            $ref: '#/components/schemas/Challenge'
+        certificateId:
+          type: string
+          nullable: true
+          description: Set when status is valid
+        expiresAt:
+          type: string
+          format: date-time
+        createdAt:
+          type: string
+          format: date-time
     CertificateRequest:
       type: object
       required:
@@ -319,50 +356,15 @@ components:
         csr:
           type: string
           description: Optional CSR in PEM format (if key is managed client-side)
-    Challenge:
-      type: object
-      properties:
-        id:
-          type: string
-        type:
-          type: string
-          enum:
-          - http-01
-          - dns-01
-          - tls-alpn-01
-        domain:
-          type: string
-        status:
-          type: string
-          enum:
-          - pending
-          - processing
-          - valid
-          - invalid
-        token:
-          type: string
-          description: Challenge token to deploy
-        validationRecord:
-          type: object
-          description: Expected record (URL for http-01, DNS record for dns-01)
-    CertificateListResponse:
-      type: object
-      properties:
-        certificates:
-          type: array
-          items:
-            $ref: '#/components/schemas/Certificate'
-        total:
-          type: integer
-        page:
-          type: integer
+  parameters:
+    CertificateId:
+      name: certificateId
+      in: path
+      required: true
+      description: Certificate identifier
+      schema:
+        type: string
   responses:
-    Unauthorized:
-      description: Authentication required
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
     NotFound:
       description: Resource not found
       content:
@@ -375,14 +377,12 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/ErrorResponse'
-  parameters:
-    CertificateId:
-      name: certificateId
-      in: path
-      required: true
-      description: Certificate identifier
-      schema:
-        type: string
+    Unauthorized:
+      description: Authentication required
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
   securitySchemes:
     ApiKeyAuth:
       type: apiKey
