@@ -145,6 +145,9 @@ apis:
   - type: Documentation
     url: https://letsencrypt.org/docs/
 common:
+  - type: CapabilityMap
+    url: capabilities/ssl-tls-capability-edges.yml
+    name: SSL/TLS Business Capability Map
   - type: AgenticAccess
     url: agentic-access/ssl-tls-agentic-access.yml
   - type: VulnerabilityDisclosure
