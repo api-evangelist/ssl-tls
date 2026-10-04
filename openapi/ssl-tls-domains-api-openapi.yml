@@ -59,6 +59,27 @@ paths:
                 $ref: '#/components/schemas/DomainListResponse'
 components:
   schemas:
+    Domain:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        validationStatus:
+          type: string
+          enum:
+          - unverified
+          - pending
+          - verified
+          - failed
+        validationMethod:
+          type: string
+          enum:
+          - http-01
+          - dns-01
+          - tls-alpn-01
+          - email
     DomainListResponse:
       type: object
       properties:
@@ -94,27 +115,6 @@ components:
         validationRecord:
           type: object
           description: Expected record (URL for http-01, DNS record for dns-01)
-    Domain:
-      type: object
-      properties:
-        id:
-          type: string
-        name:
-          type: string
-        validationStatus:
-          type: string
-          enum:
-          - unverified
-          - pending
-          - verified
-          - failed
-        validationMethod:
-          type: string
-          enum:
-          - http-01
-          - dns-01
-          - tls-alpn-01
-          - email
   securitySchemes:
     ApiKeyAuth:
       type: apiKey
